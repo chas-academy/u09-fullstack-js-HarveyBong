@@ -92,9 +92,36 @@ if(token){
   } )
 } else{ res.json(null)}
 }
+
+const logoutUser = (req, res) => {
+  const { token } = req.cookies;
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        
+        return res.status(401).json({
+          error: 'Invalid token',
+        });
+      }
+      
+      
+      res.cookie('token', '', { maxAge: 0 }).json({
+        message: 'Successfully logged out',
+      });
+    });
+  } else {
+    
+    res.status(400).json({
+      error: 'No token found',
+    });
+  }
+};
+
 module.exports = {
   test,
   registerUser,
   loginUser,
   getProfile,
+  logoutUser,
 };

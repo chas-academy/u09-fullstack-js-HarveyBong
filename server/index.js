@@ -7,14 +7,17 @@ const cookieParser= require('cookie-parser')
 
 //db connection
 mongoose.connect(process.env.MONGO_URL)
-.then(()=> console.log('db connected') )
-.catch (()=> console.log('db not connected', err))
+.then(()=> console.log('Mongodb connected') )
+.catch (()=> console.log('db not connected',err))
 
 //middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
-
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:5173' 
+  }));
 
 app.use('/', require('./routes/authRoutes'));
 
