@@ -28,7 +28,7 @@ try {
   } else{
     toast.success(`Login successful, welcome!` )
     setData({});
-    navigate('/')
+    navigate('/dashboard')
   }
 } catch (error) {
   
