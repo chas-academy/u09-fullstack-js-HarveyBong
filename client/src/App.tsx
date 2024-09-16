@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import { Toaster } from 'react-hot-toast'
 import {UserContextProvider} from "../context/userContext"
 import Dashboard from './pages/Dashboard'
+import Publish from './pages/Publish'
 
 
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -28,6 +29,7 @@ function App() {
         <Route path='/register' element={<Register/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/dashboard' element={<Dashboard/>} />
+        <Route path='/publish' element={<Publish/>} />
       </Routes>
       </UserContextProvider>
     </>

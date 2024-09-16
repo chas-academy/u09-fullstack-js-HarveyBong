@@ -21,6 +21,9 @@ app.use(cors({
 
 app.use('/', require('./routes/authRoutes'));
 
+//upload images
+app.use('/uploads', express.static('uploads')); 
+
 
 const port = 8000;
 

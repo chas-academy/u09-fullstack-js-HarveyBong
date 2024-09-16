@@ -9,8 +9,8 @@ const test = (req, res) => {
 // register
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-
+    const { name, email, password, role } = req.body;
+    console.log('Role received from frontend:', role);
     //Check if name was entered
     if (!name) {
       return res.json({
@@ -38,6 +38,7 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      role
     });
 
     return res.json(user);

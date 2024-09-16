@@ -4,6 +4,7 @@ import React from 'react';
 
 
 interface User {
+    role: string;
     name: string;
     
   }
