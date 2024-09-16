@@ -9,15 +9,18 @@ const navigate = useNavigate()
     name: '',
     email:'',
     password:'',
+    role:'Customer',
   })
 
   const registerUser = async (e) => {
     e.preventDefault()
 
-    const {name, email, password} = data
+    const {name, email, password, role} = data
+
+    console.log({ name, email, password, role });
     try {
       const {data} = await axios.post('/register', {
-        name, email, password
+        name, email, password, role
       })
 
       if(data.error){
@@ -25,7 +28,10 @@ const navigate = useNavigate()
         
       }
       else{
-        setData({})
+        setData({ name: '',
+          email: '',
+          password: '',
+          role: 'Customer' })
         toast.success('Register successful, now try to login!')
         navigate('/login')
       }
@@ -43,6 +49,33 @@ const navigate = useNavigate()
         <input type='email' placeholder='enter email...'value={data.email} onChange={(e)=> setData({...data,email: e.target.value})}/>
         <label>Password</label>
         <input type='password' placeholder='enter password...'value={data.password} onChange={(e)=> setData({...data,password: e.target.value})}/>
+        <label>Typ av användare</label>
+  
+  <div>
+    <label>
+      <input 
+        type='radio' 
+        name='role' 
+        value='Customer' 
+        checked={data.role === 'Customer'} 
+        onChange={(e) => setData({...data, role: e.target.value})}
+      />
+      Customer
+    </label>
+  </div>
+
+  <div>
+    <label>
+      <input 
+        type='radio' 
+        name='role' 
+        value='Expert' 
+        checked={data.role === 'Expert'} 
+        onChange={(e) => setData({...data, role: e.target.value})}
+      />
+      Expert
+    </label>
+  </div>
         <button type='submit'>Submit</button>
       </form>
     </div>

@@ -10,12 +10,16 @@ export default function Navbar() {
   const { logout } = useLogout();
   return (
 
-    <nav>
+    <nav className="flex items-center justify-between py-8  px-10 bg-slate-100 drop-shadow-md">
     <Link to='/'>Home</Link>
+    <Link to='/publish'>Publicera vara</Link>
     <Link to='/register'>Register</Link>
     <Link to='/login'>Login</Link>
+    
     <Link to='/dashboard'>{ user ?
-    <h1>{user.name}</h1> : <h1>guest</h1>}
+    <h1>{user.name}</h1> : <h1>guest</h1>
+  }
+    
     <button onClick={logout}>Logout</button>
     </Link>
     </nav>
