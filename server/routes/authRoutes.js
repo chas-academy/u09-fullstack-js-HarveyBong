@@ -5,6 +5,7 @@ const {test, registerUser,loginUser,logoutUser, getProfile} = require('../contro
 const cors = require('cors');
 const { createItem } = require('../controllers/itemController');
 const { upload } = require('../controllers/uploadController'); 
+const requireAuth = require('../middleware/requireAuth');
 
 
 // middleware
@@ -21,11 +22,11 @@ router.get('/', test )
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser)
-router.get('/profile', getProfile)
+router.get('/profile', requireAuth, getProfile)
 
 
 //Item posting routes
-router.post('/items', upload, createItem); 
+router.post('/items', requireAuth, upload, createItem); 
 router.get('/items', getItems);
 
 

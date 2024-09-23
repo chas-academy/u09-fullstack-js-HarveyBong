@@ -71,7 +71,7 @@ const PublishItemForm = () => {
         onChange={(e) => setFile(e.target.files?.[0] || null)} 
         className="border p-2"
       />
-      <button type="submit" className="bg-blue-500 text-white p-2">Publish</button>
+      <button type="submit" className="bg-blue-500 mx-2 hover:bg-black text-white p-2 rounded-md">Publish</button>
     </form>
   );
 };

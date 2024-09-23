@@ -1,36 +1,45 @@
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../context/userContext';
 
 
 export default function Login() {
 const navigate = useNavigate();
+const { login } = useContext(UserContext) || { login: () => {} };;
   const [data, setData]=useState({
   
     email:'',
     password:'',
   })
 
-const loginUser = async (e) => {
+const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault()
 const {email, password} = data;
 try {
-  const {data} = await axios.post('/login',{
+  const {data :responseData} = await axios.post('/login',{
     email,
     password,
   })
+  console.log("Login response:", responseData);
 
-  if(data.error){
+  if(responseData.error){
   
-    toast.error(data.error)
+    toast.error(responseData.error)
   } else{
     toast.success(`Login successful, welcome!` )
-    setData({});
-    navigate('/dashboard')
+    console.log("navigate to dashboard bro", data)
+    console.log('User logged in:', responseData)
+    login(responseData); // Anropa login-funktionen
+    setData({ email: '', password: '' });
+    navigate('/dashboard');
+
   }
 } catch (error) {
+  console.error("Login error:", error); // Logga felet
+  toast.error("An error occurred while logging in.");
   
 }
 }

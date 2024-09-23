@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast'
 import {UserContextProvider} from "../context/userContext"
 import Dashboard from './pages/Dashboard'
 import Publish from './pages/Publish'
-
+import ProtectedRoute from './components/ProtectedRoute'
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -28,8 +28,22 @@ function App() {
         <Route path='/' element={<Home/>} />
         <Route path='/register' element={<Register/>} />
         <Route path='/login' element={<Login/>} />
-        <Route path='/dashboard' element={<Dashboard/>} />
-        <Route path='/publish' element={<Publish/>} />
+        <Route
+            path='/dashboard'
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/publish'
+            element={
+              <ProtectedRoute>
+                <Publish />
+              </ProtectedRoute>
+            }
+          />
       </Routes>
       </UserContextProvider>
     </>
