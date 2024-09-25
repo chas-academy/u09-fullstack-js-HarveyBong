@@ -1,10 +1,10 @@
 const multer = require('multer');
 const path = require('path');
 const Item = require('../models/Item');
-const cloudinary = require('../config/cloudinaryConfig'); // Importera din Cloudinary-konfiguration
+const cloudinary = require('../config/cloudinaryConfig'); 
 const { Readable } = require('stream');
-// Setup multer for file uploads
-const storage = multer.memoryStorage(); // Använd minneslagring istället för disklagring
+
+const storage = multer.memoryStorage(); 
 
 const upload = multer({ storage: storage }).single('image');
 
@@ -18,12 +18,12 @@ const createItem = async (req, res) => {
 
     let imageUrl = '';
     if (req.file) {
-      // Skapa en läsbar ström från bufferten
+      
       const stream = new Readable();
       stream.push(req.file.buffer);
-      stream.push(null); // Signalera att strömmen är slut
+      stream.push(null); 
 
-      // Använd upload_stream istället för upload
+      
       const result = await new Promise((resolve, reject) => {
         stream
           .pipe(cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
@@ -34,7 +34,7 @@ const createItem = async (req, res) => {
           }));
       });
       
-      imageUrl = result.secure_url; // Hämta den säkra URL:en
+      imageUrl = result.secure_url; 
     }
 
     // Spara objektet i databasen
@@ -42,7 +42,7 @@ const createItem = async (req, res) => {
       title,
       description,
       price,
-      image: imageUrl, // Använd imageUrl här
+      image: imageUrl, 
       createdAt: new Date(),
     });
 
