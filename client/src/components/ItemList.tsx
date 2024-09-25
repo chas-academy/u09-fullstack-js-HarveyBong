@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 
+
 interface Item {
   title: string;
   description: string;
@@ -62,7 +63,7 @@ const ItemList: React.FC = () => {
   })}
 </p>
             {item.image && (
-              <img src={`http://localhost:8000/${item.image}`} alt={item.title} className=" mt-2" />
+              <img src={`${item.image}`} alt={item.title} className=" mt-2" />
             )}
           </div>
         ))

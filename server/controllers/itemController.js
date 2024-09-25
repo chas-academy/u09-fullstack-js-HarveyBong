@@ -1,35 +1,48 @@
-
 const multer = require('multer');
 const path = require('path');
 const Item = require('../models/Item');
+const cloudinary = require('../config/cloudinaryConfig'); 
+const { Readable } = require('stream');
 
-// Setup multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Directory where images will be saved
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
-  }
-});
+const storage = multer.memoryStorage(); 
 
 const upload = multer({ storage: storage }).single('image');
 
 const createItem = async (req, res) => {
   try {
     const { title, description, price } = req.body;
-    const image = req.file ? req.file.path : '';
 
     if (!title || !description || !price) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
 
-    // Save the item in the database (assuming you have a model for Item)
+    let imageUrl = '';
+    if (req.file) {
+      
+      const stream = new Readable();
+      stream.push(req.file.buffer);
+      stream.push(null); 
+
+      
+      const result = await new Promise((resolve, reject) => {
+        stream
+          .pipe(cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+            if (error) {
+              return reject(error);
+            }
+            resolve(result);
+          }));
+      });
+      
+      imageUrl = result.secure_url; 
+    }
+
+    // Spara objektet i databasen
     const newItem = new Item({
       title,
       description,
       price,
-      image,
+      image: imageUrl, 
       createdAt: new Date(),
     });
 
@@ -40,16 +53,19 @@ const createItem = async (req, res) => {
     res.status(500).json({ error: 'Failed to publish item.' });
   }
 };
+
 const getItems = async (req, res) => {
   try {
-    const items = await Item.find(); 
+    const items = await Item.find();
     res.json(items);
   } catch (error) {
     console.error('Error retrieving items:', error);
     res.status(500).json({ error: 'Failed to retrieve items' });
   }
 };
+
 module.exports = {
   createItem,
   getItems,
+  upload,
 };

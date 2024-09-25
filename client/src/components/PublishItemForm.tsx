@@ -11,13 +11,13 @@ const PublishItemForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create form data to send to the backend
+    
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('price', price);
     
-    // If a file is selected, append it
+    
     if (file) {
       formData.append('image', file);
     }
@@ -25,7 +25,7 @@ const PublishItemForm = () => {
     formData.forEach((value, key) => {
       console.log(key, value);
     });
-    // Send form data to the backend
+    
     const response = await fetch('http://localhost:8000/items', {
       method: 'POST',
       body: formData, // send FormData

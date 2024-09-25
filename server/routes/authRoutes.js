@@ -1,10 +1,10 @@
 const express = require('express');
-const { getItems } = require('../controllers/itemController');
+const { getItems,createItem ,upload} = require('../controllers/itemController');
 const router = express.Router();
 const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
 const cors = require('cors');
-const { createItem } = require('../controllers/itemController');
-const { upload } = require('../controllers/uploadController'); 
+
+
 const requireAuth = require('../middleware/requireAuth');
 
 
