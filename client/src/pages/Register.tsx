@@ -41,7 +41,7 @@ const navigate = useNavigate()
   }
   
   return (
-    <div>
+    <div className='flex flex-col px-10'>
       <form onSubmit={registerUser}>
         <label>Name</label>
         <input type='text' placeholder='enter name...'value={data.name} onChange={(e)=> setData({...data,name: e.target.value})}/>

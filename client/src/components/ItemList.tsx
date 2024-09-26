@@ -43,7 +43,7 @@ const ItemList: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="space-y-4">
+    <div className="container space-y-4 ">
       {items.length > 0 ? (
         items.map((item) => (
           <div key={item.title} className="border p-4 rounded">
@@ -63,7 +63,7 @@ const ItemList: React.FC = () => {
   })}
 </p>
             {item.image && (
-              <img src={`${item.image}`} alt={item.title} className=" mt-2" />
+              <img src={`${item.image}`} alt={item.title} className="w-64 object-cover h-64 mt-2" />
             )}
           </div>
         ))
