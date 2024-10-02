@@ -10,17 +10,18 @@ const itemSchema = new mongoose.Schema({
       required: true,
     },
     price: {
-      type: Number,  // Ensure that price is defined as a number
+      type: Number,  
       required: true,
     },
     image: {
       type: String,
-      required: false,  // Depending on whether you require this field
+      required: false, 
     },
     createdAt: {
       type: Date,
       default: Date.now,
     },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   });
   
   const Item = mongoose.model('Item', itemSchema);

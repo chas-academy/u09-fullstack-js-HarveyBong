@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const Item = require('../models/Item');
+const UserModel = require('../models/user');
 const cloudinary = require('../config/cloudinaryConfig'); 
 const { Readable } = require('stream');
 
@@ -10,12 +11,19 @@ const upload = multer({ storage: storage }).single('image');
 
 const createItem = async (req, res) => {
   try {
+    console.log('Recieved request', req.file);
+    console.log('User in createItem:', req.user);
+    if (!req.user || !req.user.id) {
+      return res.status(400).json({ error: 'User not authenticated' });
+    }
     const { title, description, price } = req.body;
-
     if (!title || !description || !price) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
-
+    const user = await UserModel.findById(req.user.id); 
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     let imageUrl = '';
     if (req.file) {
       
@@ -44,6 +52,7 @@ const createItem = async (req, res) => {
       price,
       image: imageUrl, 
       createdAt: new Date(),
+      createdBy: req.user.id,
     });
 
     await newItem.save();
@@ -56,7 +65,7 @@ const createItem = async (req, res) => {
 
 const getItems = async (req, res) => {
   try {
-    const items = await Item.find();
+    const items = await Item.find().populate('createdBy', 'name');
     res.json(items);
   } catch (error) {
     console.error('Error retrieving items:', error);
