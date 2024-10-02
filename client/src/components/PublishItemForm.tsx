@@ -16,8 +16,6 @@ const PublishItemForm = () => {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('price', price);
-    
-    
     if (file) {
       formData.append('image', file);
     }
@@ -28,7 +26,7 @@ const PublishItemForm = () => {
     
     const response = await fetch('http://localhost:8000/items', {
       method: 'POST',
-      body: formData, // send FormData
+      body: formData, 
       credentials: 'include',
     });
 

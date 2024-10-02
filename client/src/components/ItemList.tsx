@@ -8,6 +8,10 @@ interface Item {
   price: number;
   image: string; // Path or URL to the image
   createdAt: string;
+  createdBy: {
+    name: string,
+    id: string,
+  }; 
 }
 
 const ItemList: React.FC = () => {
@@ -48,8 +52,9 @@ const ItemList: React.FC = () => {
         items.map((item) => (
           <div key={item.title} className="border p-4 rounded">
             <h2 className="text-xl font-bold">{item.title}</h2>
-            
+            <p className='flex justify-end'>Uppladdat av: {item.createdBy.name}</p>
             <p>{item.description}</p>
+            
             <p>Price: {item.price}kr</p>
             <p>
   Published on: {new Date(item.createdAt).toLocaleString('sv-SE', {
