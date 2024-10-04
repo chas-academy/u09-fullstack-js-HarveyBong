@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
-    title: {
+   
+  
+  title: {
       type: String,
       required: true,
     },

@@ -73,8 +73,28 @@ const getItems = async (req, res) => {
   }
 };
 
+const getItemById = async (req, res) => {
+  const itemId = req.params.id; 
+  console.log(`Fetching item with ID: ${itemId}`); 
+
+  try {
+    const item = await Item.findById(itemId).populate('createdBy', 'name'); 
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    res.json(item); 
+  } catch (error) {
+    console.error('Error retrieving item:', error);
+    res.status(500).json({ message: 'Error retrieving item' });
+  }
+};
+
+
+
 module.exports = {
   createItem,
   getItems,
+  getItemById,
   upload,
+  
 };
