@@ -2,6 +2,7 @@ const User = require("../models/user");
 const { hashPassword, comparePassword } = require("../helpers/auth");
 const jwt = require('jsonwebtoken')
 
+const RefreshToken = require('../models/RefreshToken')
 const test = (req, res) => {
   res.json("test is working :P");
 };
@@ -54,7 +55,6 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     // check if user exists
-
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({
@@ -65,18 +65,34 @@ const loginUser = async (req, res) => {
     //check if password match
     const match = await comparePassword(password, user.password);
     if (match) {
-     jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) =>{
-        if(err) throw err;
-         res.cookie('token', token).json(user)
-     } )
-     
-    }
-    if (!match){
+      // Generera access token
+      const accessToken = jwt.sign(
+        { userId: user._id, email: user.email, name: user.name },
+        process.env.JWT_SECRET,
+        { expiresIn: '15m' }
+      );
+
+      // Genererate refresh token
+      const refreshToken = jwt.sign(
+        { userId: user._id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: '7d' } 
+      );
+
+      // save refresh-token in database
+      const newRefreshToken = new RefreshToken({ userId: user._id, token: refreshToken });
+      await newRefreshToken.save();
+
+      // send both access-token och refresh-token to client
+      res
+        .cookie('token', accessToken, { httpOnly: true })
+        .cookie('refreshToken', refreshToken, { httpOnly: true })
+        .json(user);
+    } else {
       res.json({
         error: "Wrong password, try again!",
       });
     }
-    
   } catch (error) {
     console.log(error);
   }
