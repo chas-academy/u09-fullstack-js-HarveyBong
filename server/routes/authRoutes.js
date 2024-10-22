@@ -3,6 +3,7 @@ const { getItems,createItem, getItemById, upload} = require('../controllers/item
 const router = express.Router();
 const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
 const cors = require('cors');
+const { followItem, getFollowedItems } = require('../controllers/userController')
 //const { refreshTokens } = require('../tokenStore');
 const jwt = require ('jsonwebtoken')
 const requireAuth = require('../middleware/requireAuth');
@@ -31,6 +32,10 @@ router.get('/items', getItems);
 
 //Get item by id
 router.get('/items/:id', getItemById); 
+
+// Route för att följa en annons
+router.post('/follow/:itemId', requireAuth, followItem);
+router.get('/followed', requireAuth, getFollowedItems); 
 
 
 // Refresh token route

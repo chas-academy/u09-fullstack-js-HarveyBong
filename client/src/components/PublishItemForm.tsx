@@ -28,6 +28,8 @@ const PublishItemForm = () => {
       method: 'POST',
       body: formData, 
       credentials: 'include',
+      
+    
     });
 
     if (response.ok) {

@@ -9,7 +9,6 @@ const requireAuth = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ error: 'Access Denied. No token provided.' });
   }
-
   try {
     // Verifiera token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
