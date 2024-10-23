@@ -3,20 +3,22 @@ const jwt = require('jsonwebtoken');
 // Middleware för att skydda routes
 const requireAuth = (req, res, next) => {
   const { token } = req.cookies; // Hämta token från cookies
-  console.log('Request headers:', req.headers.cookie);
-  console.log('User in requireAuth:', req.user);
-  console.log('coockiies in requireAuth:', req.cookies);
+  console.log('Request cookies in authController.js:', req.cookies); // Logga alla cookies
+
   if (!token) {
+    console.error('No token found in cookies');
     return res.status(401).json({ error: 'Access Denied. No token provided.' });
   }
+
   try {
+    console.log('Token från cookies:', token);
     // Verifiera token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded JWT:",decoded)
     req.user = decoded; // Lagra användardata i `req`
-    console.log('User after decoding in requireAuth:', req.user); // Ny logg för att se resultatet
+    console.log('Decoded JWT:', decoded); // Logga den dekodade JWT
     next(); // Gå vidare till nästa middleware eller route handler
   } catch (err) {
+    console.error('Token verification error:', err.message);
     return res.status(403).json({ error: 'Invalid Token' });
   }
 };

@@ -11,38 +11,50 @@ const upload = multer({ storage: storage }).single('image');
 
 const createItem = async (req, res) => {
   try {
-    console.log('Recieved request', req.file);
-    console.log('User in createItem:', req.user);
-    if (!req.user || !req.user.id) {
-      return res.status(400).json({ error: 'User not authenticated' });
+    console.log('Request body:', req.body); // Logga hela request body
+    console.log('Request file:', req.file); // Logga filen om den finns
+
+    if (!req.user || !req.user.userId) {
+      console.error('User not authenticated in createItem');
+      return res.status(401).json({ error: 'User not authenticated' });
     }
+
     const { title, description, price } = req.body;
     if (!title || !description || !price) {
+      console.error('Missing fields in request body');
       return res.status(400).json({ error: 'All fields are required.' });
     }
-    const user = await UserModel.findById(req.user.id); 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+
+    
+    if (!req.file) {
+      console.error('Image file is missing in request');
+      return res.status(400).json({ error: 'Image file is required.' });
     }
+
+    // Logik för att ladda upp till Cloudinary
     let imageUrl = '';
     if (req.file) {
-      
-      const stream = new Readable();
-      stream.push(req.file.buffer);
-      stream.push(null); 
+      try {
+        const stream = new Readable();
+        stream.push(req.file.buffer);
+        stream.push(null);
 
-      
-      const result = await new Promise((resolve, reject) => {
-        stream
-          .pipe(cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+        const result = await new Promise((resolve, reject) => {
+          stream.pipe(cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
             if (error) {
+              console.error('Cloudinary upload error:', error);
               return reject(error);
             }
             resolve(result);
           }));
-      });
-      
-      imageUrl = result.secure_url; 
+        });
+
+        imageUrl = result.secure_url;
+        console.log('Image uploaded to Cloudinary:', imageUrl); // Logga den uppladdade bildens URL
+      } catch (error) {
+        console.error('Error uploading image to Cloudinary:', error);
+        return res.status(500).json({ error: 'Failed to upload image.' });
+      }
     }
 
     // Spara objektet i databasen
@@ -50,18 +62,20 @@ const createItem = async (req, res) => {
       title,
       description,
       price,
-      image: imageUrl, 
+      image: imageUrl,
       createdAt: new Date(),
-      createdBy: req.user.id,
+      createdBy: req.user.userId,
     });
 
     await newItem.save();
+    console.log('New item saved successfully:', newItem); // Logga det sparade objektet
     res.status(201).json(newItem);
   } catch (error) {
     console.error('Error publishing item:', error);
     res.status(500).json({ error: 'Failed to publish item.' });
   }
 };
+
 
 const getItems = async (req, res) => {
   try {

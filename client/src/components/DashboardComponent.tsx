@@ -3,6 +3,7 @@ import FollowedItems from './FollowedItems';
 
 const Dashboard: React.FC = () => {
   return (
+    
     <div className="flex justify-center items-center h-screen">
       <div className="w-80">
         <h1 className="text-3xl font-bold mb-6">Konto</h1>
