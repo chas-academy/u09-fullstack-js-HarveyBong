@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface Item {
   _id: string;
@@ -20,19 +22,17 @@ const ItemList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const [followedItems, setFollowedItems] = useState<string[]>([]);
+  const [followedItems, setFollowedItems] = useState<Item[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch('http://localhost:8000/items', {
-          method: 'GET',
-          credentials: 'include',
+        const response = await axios.get('http://localhost:8000/items', {
+          withCredentials: true,
         });
-        if (response.ok) {
-          const data = await response.json();
-          setItems(data);
+        if (response.status === 200) {
+          setItems(response.data);
         } else {
           setError('Failed to load items.');
         }
@@ -46,17 +46,14 @@ const ItemList: React.FC = () => {
     fetchItems();
   }, []);
 
- 
   useEffect(() => {
     const fetchFollowedItems = async () => {
       try {
-        const response = await fetch('http://localhost:8000/followed', {
-          method: 'GET',
-          credentials: 'include',
+        const response = await axios.get('http://localhost:8000/followed', {
+          withCredentials: true,
         });
-        if (response.ok) {
-          const data = await response.json();
-          setFollowedItems(data); 
+        if (response.status === 200) {
+          setFollowedItems(response.data);
         } else {
           console.error('Failed to fetch followed items', response.status);
         }
@@ -65,7 +62,6 @@ const ItemList: React.FC = () => {
       }
     };
     
-
     fetchFollowedItems();
   }, []);
 
@@ -80,18 +76,22 @@ const ItemList: React.FC = () => {
 
  const handleFollow = async (itemId: string) => {
   try {
-    const response = await fetch(`http://localhost:8000/follow/${itemId}`, {
-      method: 'POST',
-      credentials: 'include',
+    const response = await axios.post(`http://localhost:8000/follow/${itemId}`, {}, {
+      withCredentials: true,
     });
-    if (response.ok) {
-      
-      setFollowedItems(prev => [...prev, itemId]);
+    if (response.status === 200) {
+      const followedItem = items.find(item => item._id === itemId);
+      if (followedItem) {
+        setFollowedItems(prev => [...prev, followedItem]);
+      }
+      toast.success('Item followed successfully!');
     } else {
       console.error('Failed to follow item', response.status);
+      toast.error('Failed to follow the item.');
     }
   } catch (err) {
     console.error('Error following item', err);
+    toast.error('Failed to follow the item.');
   }
 };
 
@@ -106,7 +106,7 @@ const ItemList: React.FC = () => {
             <div
               key={item._id}
               className="border p-4 rounded hover:bg-slate-300 cursor-pointer"
-              onClick={() => handleItemClick(item)} // Anropa handleItemClick med hela objektet
+              onClick={() => handleItemClick(item)}
             >
               <button
                 onClick={(e) => {
@@ -115,7 +115,7 @@ const ItemList: React.FC = () => {
                 }}
                 className="ml-4"
               >
-                {followedItems.includes(item._id) ? (
+                {followedItems.some(followedItem => followedItem._id === item._id) ? (
                   <AiFillStar className="text-yellow-500" /> 
                 ) : (
                   <AiOutlineStar className="text-gray-500" />

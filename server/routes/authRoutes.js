@@ -4,7 +4,7 @@ const router = express.Router();
 const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
 
 const { followItem, getFollowedItems } = require('../controllers/userController')
-//const { refreshTokens } = require('../tokenStore');
+
 const jwt = require ('jsonwebtoken')
 const requireAuth = require('../middleware/requireAuth');
 
@@ -40,7 +40,10 @@ router.get('/items', getItems);
 router.get('/items/:id', getItemById); 
 
 // Route för att följa en annons
-router.post('/follow/:itemId', requireAuth, followItem);
+router.post('/follow/:itemId', requireAuth, (req, res, next) => {
+    console.log(`Route /follow/${req.params.itemId} reached`);
+    next();
+  }, followItem);
 router.get('/followed', requireAuth, getFollowedItems); 
 
 
