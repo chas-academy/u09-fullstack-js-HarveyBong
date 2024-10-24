@@ -1,9 +1,9 @@
 const express = require('express');
-const { getItems,createItem, getItemById, upload} = require('../controllers/itemController');
+const { getItems,createItem, getItemById, upload,getMyAds,deleteItem} = require('../controllers/itemController');
 const router = express.Router();
 const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
 
-const { followItem, getFollowedItems } = require('../controllers/userController')
+const { followItem, getFollowedItems,unfollowItem } = require('../controllers/userController')
 
 const jwt = require ('jsonwebtoken')
 const requireAuth = require('../middleware/requireAuth');
@@ -39,12 +39,21 @@ router.get('/items', getItems);
 //Get item by id
 router.get('/items/:id', getItemById); 
 
-// Route för att följa en annons
+// Routes för att följa & avfölja en annons
 router.post('/follow/:itemId', requireAuth, (req, res, next) => {
     console.log(`Route /follow/${req.params.itemId} reached`);
     next();
   }, followItem);
 router.get('/followed', requireAuth, getFollowedItems); 
+
+router.post('/unfollow/:itemId', requireAuth, unfollowItem);
+
+
+// User Ads....
+router.get('/my-ads', requireAuth, getMyAds);
+router.delete('/items/:itemId', requireAuth, deleteItem);
+
+
 
 
 // Refresh token route

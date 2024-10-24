@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Item from '../interfaces/Item';
 
-interface Item {
+/*interface Item {
   _id: string;
   title: string;
   description: string;
@@ -15,7 +16,7 @@ interface Item {
     name: string;
     id: string;
   }; 
-}
+}*/
 
 const ItemList: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -74,26 +75,44 @@ const ItemList: React.FC = () => {
     }
   };
 
- const handleFollow = async (itemId: string) => {
-  try {
-    const response = await axios.post(`http://localhost:8000/follow/${itemId}`, {}, {
-      withCredentials: true,
-    });
-    if (response.status === 200) {
-      const followedItem = items.find(item => item._id === itemId);
-      if (followedItem) {
-        setFollowedItems(prev => [...prev, followedItem]);
+  const handleFollow = async (itemId: string) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/follow/${itemId}`, {}, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        const followedItem = items.find(item => item._id === itemId);
+        if (followedItem) {
+          setFollowedItems(prev => [...prev, followedItem]);
+        }
+        toast.success('Item followed successfully!');
+      } else {
+        console.error('Failed to follow item', response.status);
+        toast.error('Failed to follow the item.');
       }
-      toast.success('Item followed successfully!');
-    } else {
-      console.error('Failed to follow item', response.status);
+    } catch (err) {
+      console.error('Error following item', err);
       toast.error('Failed to follow the item.');
     }
-  } catch (err) {
-    console.error('Error following item', err);
-    toast.error('Failed to follow the item.');
-  }
-};
+  };
+
+  const handleUnfollow = async (itemId: string) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/unfollow/${itemId}`, {}, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setFollowedItems(prev => prev.filter(item => item._id !== itemId));
+        toast.success('Item unfollowed successfully!');
+      } else {
+        console.error('Failed to unfollow item', response.status);
+        toast.error('Failed to unfollow the item.');
+      }
+    } catch (err) {
+      console.error('Error unfollowing item', err);
+      toast.error('Failed to unfollow the item.');
+    }
+  };
 
   if (loading) return <p>Loading items...</p>;
   if (error) return <p>{error}</p>;
@@ -110,8 +129,12 @@ const ItemList: React.FC = () => {
             >
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); 
-                  handleFollow(item._id);
+                  e.stopPropagation();
+                  if (followedItems.some(followedItem => followedItem._id === item._id)) {
+                    handleUnfollow(item._id);
+                  } else {
+                    handleFollow(item._id);
+                  }
                 }}
                 className="ml-4"
               >

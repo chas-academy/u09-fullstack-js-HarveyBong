@@ -9,16 +9,11 @@ export default function Dashboard(){
     if (!userContext) {
         return <div>Loading...</div>;
       }
-
-      const { user } = userContext;
     return(
-        <div>
+        
  
  <DashboardComponent />
-            <h1>Dashboard</h1>
-            {!!user&&(<h2>hello noob {user.name}</h2>)}
-            {!!user&&(<h2>{user.role}</h2>)}
-        </div>
+           
 
         
     )
