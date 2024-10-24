@@ -5,7 +5,7 @@ const cors =require('cors');
 const app =express();
 const {mongoose} = require('mongoose');
 const cookieParser= require('cookie-parser')
-
+const authRoutes = require('./routes/authRoutes'); 
 //db connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Mongodb connected') )
@@ -16,11 +16,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
+    origin: 'http://localhost:5173',
     credentials: true,
-    origin: 'http://localhost:5173' 
+    allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
-app.use('/', require('./routes/authRoutes'));
+
+  //app.use('/', require('./routes/authRoutes'));
+  app.use('/', authRoutes);
 
 //upload images
 app.use('/uploads', express.static('uploads')); 

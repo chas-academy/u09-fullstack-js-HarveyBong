@@ -2,26 +2,33 @@ const express = require('express');
 const { getItems,createItem, getItemById, upload} = require('../controllers/itemController');
 const router = express.Router();
 const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
-const cors = require('cors');
-//const { refreshTokens } = require('../tokenStore');
+
+const { followItem, getFollowedItems } = require('../controllers/userController')
+
 const jwt = require ('jsonwebtoken')
 const requireAuth = require('../middleware/requireAuth');
 
+let refreshTokens = [];
 
 
 
-router.use(
-    cors({
-        credentials: true,
-        origin: 'http://localhost:5173'
-    })
-)
 
 //user routes
 router.get('/', test )
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.post('/logout', logoutUser)
+router.post('/logout', (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ error: 'No refresh token provided' });
+    }
+  
+    // Logik för att ta bort refresh token om den finns
+    refreshTokens = refreshTokens.filter(token => token !== refreshToken);
+    res.clearCookie('refreshToken');
+    res.clearCookie('token');
+    return res.sendStatus(204);
+  });
 router.get('/profile', requireAuth, getProfile)
 
 
@@ -31,6 +38,13 @@ router.get('/items', getItems);
 
 //Get item by id
 router.get('/items/:id', getItemById); 
+
+// Route för att följa en annons
+router.post('/follow/:itemId', requireAuth, (req, res, next) => {
+    console.log(`Route /follow/${req.params.itemId} reached`);
+    next();
+  }, followItem);
+router.get('/followed', requireAuth, getFollowedItems); 
 
 
 // Refresh token route
@@ -45,7 +59,7 @@ router.post('/refresh-token', async (req, res) => {
         
         // get the saved refresh-token from database
         const storedToken = await RefreshToken.findOne({ userId: payload.userId, token: refreshToken });
-        if (!storedToken) return res.sendStatus(403); // Forbidden
+        if (!storedToken) return res.sendStatus(403); 
 
         // generate new access token
         const accessToken = jwt.sign(
@@ -57,7 +71,7 @@ router.post('/refresh-token', async (req, res) => {
         res.json({ accessToken });
     } catch (error) {
         console.log(error);
-        res.sendStatus(403); // Forbidden
+        res.sendStatus(403); 
     }
 });
 
