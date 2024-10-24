@@ -57,7 +57,7 @@ const createItem = async (req, res) => {
       }
     }
 
-    // Spara objektet i databasen
+    // Sn
     const newItem = new Item({
       title,
       description,
@@ -104,13 +104,51 @@ const getItemById = async (req, res) => {
 };
 
 
+const getMyAds = async (req, res) => {
+  try {
+    const userId = req.user.userId; 
 
+    const items = await Item.find({ createdBy: userId });
+    res.status(200).json(items);
+  } catch (error) {
+    console.error('Error in getMyAds:', error);
+    res.status(500).json({ error: 'Failed to fetch user ads' });
+  }
+};
+
+
+// Function to delete an item
+const deleteItem = async (req, res) => {
+  try {
+    const userId = req.user.userId; 
+    const itemId = req.params.itemId;
+
+    const item = await Item.findById(itemId);
+
+    
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    if (item.createdBy.toString() !== userId) {
+      return res.status(403).json({ message: 'You are not authorized to delete this item' });
+    }
+
+    await item.deleteOne();
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'Failed to delete item' });
+  }
+};
 
 module.exports = {
   createItem,
   getItems,
   getItemById,
   upload,
+  getMyAds,
+  deleteItem,
  
   
 };
