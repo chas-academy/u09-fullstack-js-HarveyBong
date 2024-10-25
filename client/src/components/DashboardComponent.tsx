@@ -3,6 +3,7 @@ import FollowedItems from './FollowedItems';
 import UserAds from './UserAds';
 import Item from '../interfaces/Item';
 import { useNavigate } from 'react-router-dom';
+import UserSettings from './UserSettings';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(''); 
@@ -59,7 +60,7 @@ const Dashboard: React.FC = () => {
           {activeTab === 'followed' && <FollowedItems />}
           {activeTab === 'ads' && <UserAds />}
           {activeTab === 'messages' && <div>Skickade hälsningar visas här...</div>}
-          {activeTab === 'settings' && <div>Inställningar visas här...</div>}
+          {activeTab === 'settings' && <UserSettings />}
         </div>
       </div>
     </div>

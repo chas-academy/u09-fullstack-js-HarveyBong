@@ -136,10 +136,39 @@ const logoutUser = (req, res) => {
   }
 };
 
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId; 
+    const { username, email, password } = req.body;
+
+    // Find user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update user details
+    if (username) user.name = username;
+    if (email) user.email = email;
+    if (password) {
+      // You should hash the password here before saving
+      user.password = await hashPassword(password);
+    }
+
+    // Save updated user information
+    await user.save();
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+};
+
 module.exports = {
   test,
   registerUser,
   loginUser,
   getProfile,
   logoutUser,
+  updateUserProfile,
 };

@@ -1,7 +1,7 @@
 const express = require('express');
-const { getItems,createItem, getItemById, upload,getMyAds,deleteItem} = require('../controllers/itemController');
+const { getItems,createItem, getItemById, upload,getMyAds,deleteItem } = require('../controllers/itemController');
 const router = express.Router();
-const {test, registerUser,loginUser,logoutUser, getProfile} = require('../controllers/authController')
+const {test, registerUser,loginUser,logoutUser, getProfile, updateUserProfile} = require('../controllers/authController')
 
 const { followItem, getFollowedItems,unfollowItem } = require('../controllers/userController')
 
@@ -17,6 +17,7 @@ let refreshTokens = [];
 router.get('/', test )
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+
 router.post('/logout', (req, res) => {
   
 
@@ -35,6 +36,10 @@ router.post('/logout', (req, res) => {
   
   return res.status(204).json({ message: 'Logged out successfully' });
 });
+
+
+router.put('/update-profile', requireAuth, updateUserProfile);
+
 
 router.get('/profile', requireAuth, getProfile)
 
@@ -59,6 +64,7 @@ router.post('/unfollow/:itemId', requireAuth, unfollowItem);
 // User Ads....
 router.get('/my-ads', requireAuth, getMyAds);
 router.delete('/items/:itemId', requireAuth, deleteItem);
+
 
 
 
