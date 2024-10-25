@@ -18,17 +18,24 @@ router.get('/', test )
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
-      return res.status(400).json({ error: 'No refresh token provided' });
-    }
   
-    // Logik för att ta bort refresh token om den finns
-    refreshTokens = refreshTokens.filter(token => token !== refreshToken);
-    res.clearCookie('refreshToken');
-    res.clearCookie('token');
-    return res.sendStatus(204);
-  });
+
+  const refreshToken = req.cookies.refreshToken;
+
+ 
+  res.clearCookie('refreshToken');
+  res.clearCookie('token');
+
+  if (!refreshToken) {
+    return res.status(204).json({ message: 'Logged out successfully, no refresh token provided' });
+  }
+
+  // Logik för att ta bort refresh-token om den finns
+  refreshTokens = refreshTokens.filter(token => token !== refreshToken);
+  
+  return res.status(204).json({ message: 'Logged out successfully' });
+});
+
 router.get('/profile', requireAuth, getProfile)
 
 

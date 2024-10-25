@@ -12,6 +12,7 @@ import Publish from './pages/Publish';
 import ProtectedRoute from './components/ProtectedRoute';
 import ItemList from './components/ItemList'; 
 import ItemDetails from './components/ItemDetails'; 
+import SearchableItemList from './components/SearchableItemList';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -21,9 +22,10 @@ function App() {
     <>
       <UserContextProvider>
         <Navbar />
+        
         <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<Home  />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route
