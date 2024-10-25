@@ -65,6 +65,7 @@ const UserAds: React.FC = () => {
               </button>
               <h2>{item.title}</h2>
               <p>{item.description}</p>
+              <img className='w-20' src={`${item.image}`}></img>
             </div>
           ))}
         </div>
