@@ -3,8 +3,10 @@ import { createContext, useState, useEffect, ReactNode } from 'react';
 import React from 'react';
 
 interface User {
-  role: string;
+  _id: string; 
   name: string;
+  email: string;
+  role: 'Expert' | 'Customer';
 }
 
 interface UserContextType {

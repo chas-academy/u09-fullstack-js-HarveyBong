@@ -6,6 +6,8 @@ const app =express();
 const {mongoose} = require('mongoose');
 const cookieParser= require('cookie-parser')
 const authRoutes = require('./routes/authRoutes'); 
+const offerRoutes = require('./routes/offerRoutes');
+
 //db connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Mongodb connected') )
@@ -24,7 +26,7 @@ app.use(cors({
 
   //app.use('/', require('./routes/authRoutes'));
   app.use('/', authRoutes);
-
+  app.use('/api', offerRoutes); 
 //upload images
 app.use('/uploads', express.static('uploads')); 
 

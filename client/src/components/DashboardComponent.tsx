@@ -4,6 +4,7 @@ import UserAds from './UserAds';
 import Item from '../interfaces/Item';
 import { useNavigate } from 'react-router-dom';
 import UserSettings from './UserSettings';
+import OffersInbox from './OffersInbox';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(''); 
@@ -12,7 +13,7 @@ const Dashboard: React.FC = () => {
   const handleItemClick = (item: Item) => {
     console.log(`Item clicked with ID: ${item._id}`); 
     if (window.innerWidth <= 768) {
-    navigate(`/items/${item._id}`); 
+      navigate(`/items/${item._id}`); 
     } else {
       setSelectedItem(item); 
     }
@@ -46,7 +47,7 @@ const Dashboard: React.FC = () => {
             onClick={() => setActiveTab('messages')}
             className={getTabButtonClasses('messages')}
           >
-            Skickade Hälsningar
+            Mottagna Offerter
           </button>
           <button
             onClick={() => setActiveTab('settings')}
@@ -59,7 +60,7 @@ const Dashboard: React.FC = () => {
         <div className="mt-6">
           {activeTab === 'followed' && <FollowedItems />}
           {activeTab === 'ads' && <UserAds />}
-          {activeTab === 'messages' && <div>Skickade hälsningar visas här...</div>}
+          {activeTab === 'messages' && <OffersInbox />}
           {activeTab === 'settings' && <UserSettings />}
         </div>
       </div>

@@ -5,14 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import toast from 'react-hot-toast';
 
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
+
 const SearchableItemList: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [followedItems, setFollowedItems] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [offerPrice, setOfferPrice] = useState<number>(0);
+  const [offerMessage, setOfferMessage] = useState<string>('');
+  const userContext = useContext(UserContext);
   const navigate = useNavigate();
-
+  const [isSendingOffer, setIsSendingOffer] = useState(false);
   useEffect(() => {
     // Hämta alla annonser från backend
     const fetchItems = async () => {
@@ -50,10 +56,10 @@ const SearchableItemList: React.FC = () => {
     fetchFollowedItems();
   }, []);
 
-  // Filtrera annonser när användaren skriver i sökfältet
+  
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setFilteredItems(items); // Om söktermen är tom, visa alla annonser
+      setFilteredItems(items); 
     } else {
       const filtered = items.filter(item =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -110,6 +116,48 @@ const SearchableItemList: React.FC = () => {
       setSelectedItem(item);
     }
   };
+  
+
+  const handleSendOffer = async (itemId: string) => {
+    if (isSendingOffer) return; // Förhindra flera klick
+    setIsSendingOffer(true);
+  
+    try {
+      if (userContext?.user?.role !== 'Expert') {
+        toast.error('Endast experter kan skicka offerter.');
+        return;
+      }
+  
+      // Kontrollera att värden för message och price är satta
+      if (offerMessage.trim() === '' || offerPrice <= 0) {
+        toast.error('Ange ett giltigt pris och meddelande.');
+        return;
+      }
+  
+      const response = await axios.post(
+        'http://localhost:8000/api/offers',
+        {
+          itemId,
+          amount: offerPrice,
+          message: offerMessage,
+        },
+        { withCredentials: true }
+      );
+  
+      if (response.status === 201) {
+        toast.success('Offert skickad!');
+      } else {
+        console.error('Error:', response.status);
+        toast.error('Misslyckades med att skicka offert.');
+      }
+    } catch (error) {
+      console.error('Error sending offer:', error);
+      toast.error('Misslyckades med att skicka offert.');
+    } finally {
+      setIsSendingOffer(false);
+    }
+  };
+  
 
   return (
     <div className=''>
@@ -148,6 +196,7 @@ const SearchableItemList: React.FC = () => {
                     <AiOutlineStar className="text-gray-500" />
                   )}
                 </button>
+                
                 <h2 className="text-xl font-bold">{item.title}</h2>
                 <p className="flex justify-end">Uppladdat av: {item.createdBy.name}</p>
                 <p>{item.description}</p>
@@ -172,16 +221,46 @@ const SearchableItemList: React.FC = () => {
           )}
         </div>
         {window.innerWidth > 768 && selectedItem && (
-          <div className="w-1/2 p-4 border">
-            <h2 className="text-2xl font-bold">{selectedItem.title}</h2>
-            <p>{selectedItem.description}</p>
-            <p>Pris: {selectedItem.price}kr</p>
-            <p>Uppladdat av: {selectedItem.createdBy.name}</p>
-            {selectedItem.image && (
-              <img src={`${selectedItem.image}`} alt={selectedItem.title} className="w-64 object-cover h-64 mt-2" />
-            )}
-          </div>
-        )}
+  <div className="w-1/2 p-4 border">
+    <h2 className="text-2xl font-bold">{selectedItem.title}</h2>
+    
+    
+    <div className="mt-4">
+      <input
+        type="number"
+        placeholder="Ange offertpris"
+        value={offerPrice}
+        onChange={(e) => setOfferPrice(Number(e.target.value))}
+        className="p-2 border border-gray-300 text-black rounded w-full mt-2"
+      />
+      <textarea
+        placeholder="Skriv meddelande för din offert"
+        value={offerMessage}
+        onChange={(e) => setOfferMessage(e.target.value)}
+        className="p-2 border border-gray-300 text-black rounded w-full mt-2"
+      ></textarea>
+    </div>
+
+   
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        handleSendOffer(selectedItem!._id);
+      }}
+      className="bg-green-500 text-white p-2 rounded-md mt-4"
+    >
+      Skicka offert
+    </button>
+
+    <p>{selectedItem.description}</p>
+    <p>Pris: {selectedItem.price}kr</p>
+    <p>Uppladdat av: {selectedItem.createdBy.name}</p>
+    {selectedItem.image && (
+      <img src={`${selectedItem.image}`} alt={selectedItem.title} className="w-64 object-cover h-64 mt-2" />
+    )}
+  </div>
+)}
+
       </div>
     </div>
   );
