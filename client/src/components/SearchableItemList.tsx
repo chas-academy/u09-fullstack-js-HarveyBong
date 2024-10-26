@@ -220,8 +220,9 @@ const SearchableItemList: React.FC = () => {
             <p className='text-center border-b-2 pb-10'>Inga annonser matchade din sökning.. vänligen titta på våra andra annonser nedan.</p>
           )}
         </div>
+        
         {window.innerWidth > 768 && selectedItem && (
-  <div className="w-1/2 p-4 border">
+ <div className="w-1/2 p-4 border">
     <h2 className="text-2xl font-bold">{selectedItem.title}</h2>
     
     
@@ -230,6 +231,7 @@ const SearchableItemList: React.FC = () => {
         type="number"
         placeholder="Ange offertpris"
        // value={offerPrice}
+       
         onChange={(e) => setOfferPrice(Number(e.target.value))}
         className="p-2 border border-gray-300 text-black rounded w-full mt-2"
       />
@@ -262,6 +264,7 @@ const SearchableItemList: React.FC = () => {
 )}
 
       </div>
+      
     </div>
   );
 };
