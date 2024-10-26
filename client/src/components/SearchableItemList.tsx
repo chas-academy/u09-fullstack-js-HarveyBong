@@ -229,7 +229,7 @@ const SearchableItemList: React.FC = () => {
       <input
         type="number"
         placeholder="Ange offertpris"
-        value={offerPrice}
+       // value={offerPrice}
         onChange={(e) => setOfferPrice(Number(e.target.value))}
         className="p-2 border border-gray-300 text-black rounded w-full mt-2"
       />
