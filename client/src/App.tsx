@@ -1,35 +1,50 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import axios from 'axios';
 import Home from './pages/Home';
 import { Toaster } from 'react-hot-toast';
-import { UserContextProvider } from "../context/userContext";
+import { UserContextProvider, UserContext } from "../context/userContext";
 import Dashboard from './pages/Dashboard';
 import Publish from './pages/Publish';
 import ProtectedRoute from './components/ProtectedRoute';
 import ItemList from './components/ItemList'; 
 import ItemDetails from './components/ItemDetails'; 
 import SearchableItemList from './components/SearchableItemList';
+import OfferManagement from './components/Admin/OfferManagement';
+import UserManagement from './components/Admin/UserManagement';
+import ItemManagement from './components/Admin/ItemManagement';
+import { useContext,  } from 'react';
+import AdminPage from './components/Admin/AdminPage';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
+function RequireAdmin({ children }: { children: JSX.Element }) {
+  const userContext = useContext(UserContext); // Make sure to use useContext here
 
+  if (!userContext?.user || userContext.user.role !== 'Admin') {
+    return <Navigate to="/" />;
+  }
+  return children;
+
+  
+}
 function App() {
+  
+
   return (
     <>
       <UserContextProvider>
         <Navbar />
-        
-        <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
+        <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path='/' element={<Home  />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route
-            path='/dashboard'
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
@@ -37,19 +52,44 @@ function App() {
             }
           />
           <Route
-            path='/publish'
+            path="/publish"
             element={
               <ProtectedRoute>
                 <Publish />
               </ProtectedRoute>
             }
           />
-          <Route path='/items' element={<ItemList />} />
-          <Route path='/items/:id' element={<ItemDetails />} /> 
+          <Route path="/items" element={<ItemList />} />
+          <Route path="/items/:id" element={<ItemDetails />} />
+          <Route
+            path="/admin/adminpage"
+            element={
+              <RequireAdmin>
+                <AdminPage />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <RequireAdmin>
+                <UserManagement />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="/admin/items"
+            element={
+              <RequireAdmin>
+                <ItemManagement />
+              </RequireAdmin>
+            }
+          />
         </Routes>
       </UserContextProvider>
     </>
   );
 }
+
 
 export default App;

@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
     // check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         error: "No user found",
       });
     }
@@ -65,37 +65,46 @@ const loginUser = async (req, res) => {
     //check if password match
     const match = await comparePassword(password, user.password);
     if (match) {
-      // Generera access token
-      const accessToken = jwt.sign(
-        { userId: user._id, email: user.email, name: user.name },
-        process.env.JWT_SECRET,
-        { expiresIn: '15m' },
       
+      const accessToken = jwt.sign(
+        { userId: user._id, email: user.email, name: user.name, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '15m' }
       );
 
-      // Genererate refresh token
+      
       const refreshToken = jwt.sign(
         { userId: user._id },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '7d' } 
+        { expiresIn: '7d' }
       );
 
-      // save refresh-token in database
+      
       const newRefreshToken = new RefreshToken({ userId: user._id, token: refreshToken });
       await newRefreshToken.save();
 
-      // send both access-token och refresh-token to client
+      
       res
         .cookie('token', accessToken, { httpOnly: true })
         .cookie('refreshToken', refreshToken, { httpOnly: true })
-        .json(user);
+       
+        .json({
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+          token: accessToken, 
+        });
     } else {
-      res.json({
+      res.status(400).json({
         error: "Wrong password, try again!",
       });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Login error:", error);
+    res.status(500).json({ error: "An error occurred during login." });
   }
 };
 
@@ -151,7 +160,7 @@ const updateUserProfile = async (req, res) => {
     if (username) user.name = username;
     if (email) user.email = email;
     if (password) {
-      // You should hash the password here before saving
+    
       user.password = await hashPassword(password);
     }
 

@@ -9,20 +9,13 @@ export const useLogout = () => {
 
   const logout = async () => {
     try {
-      const response = await fetch("http://localhost:8000/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      // Använd UserContext's logout funktion
+      if (userContext) {
+        await userContext.logout(); // Använd den existerande logout logiken från kontexten
 
-      if (response.ok) {
-        // Rensa användardata från UserContext
-        userContext?.setUser(null);
-        // Omdirigera användaren till login-sidan
+        // Navigera till login-sidan
         navigate("/");
         toast.success("Logged out successfully.");
-      } else {
-        console.error("Logout failed with status:", response.status);
-        toast.error("Logout failed. Please try again.");
       }
     } catch (error) {
       console.error("Error logging out:", error);
