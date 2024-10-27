@@ -8,7 +8,7 @@ const cookieParser= require('cookie-parser')
 const authRoutes = require('./routes/authRoutes'); 
 const offerRoutes = require('./routes/offerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const createAdminRoute = require('./routes/createAdmin');
+
 //db connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Mongodb connected') )
