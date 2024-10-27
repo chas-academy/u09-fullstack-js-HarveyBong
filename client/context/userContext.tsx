@@ -6,7 +6,7 @@ interface User {
   _id: string; 
   name: string;
   email: string;
-  role: 'Expert' | 'Customer';
+  role: 'Expert' | 'Customer' | 'Admin';
 }
 
 interface UserContextType {
@@ -49,20 +49,26 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
   };
 
   useEffect(() => {
-    if (!user) {
-      console.log('User is not authenticated, fetching profile...'); // Logga om användaren inte är inloggad
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+    } else {
+      
       axios
         .get('/profile', { withCredentials: true })
         .then(({ data }) => {
-          console.log('Fetched user profile data:', data); // Logga den hämtade datan
+          console.log('Fetched user profile data:', data);
           setUser(data);
-          localStorage.setItem('user', JSON.stringify(data)); // Spara användaren i localStorage
+          localStorage.setItem('user', JSON.stringify(data));
         })
         .catch((error) => {
-          console.error('Error fetching user profile:', error); // Logga eventuella fel
+          console.error('Error fetching user profile:', error);
         });
     }
   }, []);
+  
 
   return (
     <UserContext.Provider value={{ user, setUser, login, logout }}>

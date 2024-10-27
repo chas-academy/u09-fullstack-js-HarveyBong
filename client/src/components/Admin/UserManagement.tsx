@@ -17,27 +17,39 @@ const UserManagement: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/users', {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError('No authorization token found.');
+          setLoading(false);
+          return;
+        }
+  
+        const response = await axios.get('http://localhost:8000/api/admin/users', {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
           withCredentials: true,
         });
+  
         if (response.status === 200) {
           setUsers(response.data);
         } else {
           setError('Failed to load users.');
         }
       } catch (err) {
+        console.error('Error fetching users:', err);
         setError('An error occurred while fetching users.');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
   }, []);
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/users/${userId}`, {
+      const response = await axios.delete(`http://localhost:8000/api/admin/users/${userId}`, {
         withCredentials: true,
       });
       if (response.status === 200) {

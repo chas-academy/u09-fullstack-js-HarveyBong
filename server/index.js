@@ -7,7 +7,8 @@ const {mongoose} = require('mongoose');
 const cookieParser= require('cookie-parser')
 const authRoutes = require('./routes/authRoutes'); 
 const offerRoutes = require('./routes/offerRoutes');
-
+const adminRoutes = require('./routes/adminRoutes');
+const createAdminRoute = require('./routes/createAdmin');
 //db connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Mongodb connected') )
@@ -27,8 +28,14 @@ app.use(cors({
   //app.use('/', require('./routes/authRoutes'));
   app.use('/', authRoutes);
   app.use('/api', offerRoutes); 
-//upload images
-app.use('/uploads', express.static('uploads')); 
+
+  //admin routes
+  app.use('/api/admin', adminRoutes);
+ 
+
+
+  //upload images
+  app.use('/uploads', express.static('uploads')); 
 
 // Refresh tokens
 let refreshTokens = [];
