@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface User {
   _id: string;
@@ -23,14 +25,13 @@ const UserManagement: React.FC = () => {
           setLoading(false);
           return;
         }
-  
         const response = await axios.get('http://localhost:8000/api/admin/users', {
           headers: {
             Authorization: `Bearer ${token}`, 
           },
           withCredentials: true,
         });
-  
+
         if (response.status === 200) {
           setUsers(response.data);
         } else {
@@ -43,9 +44,25 @@ const UserManagement: React.FC = () => {
         setLoading(false);
       }
     };
-  
     fetchUsers();
   }, []);
+
+  const confirmDelete = (userId: string) => {
+    confirmAlert({
+      title: 'Bekräfta borttagning',
+      message: 'Är du säker på att du vill ta bort denna användare?',
+      buttons: [
+        {
+          label: 'Ja',
+          onClick: () => handleDeleteUser(userId),
+        },
+        {
+          label: 'Nej',
+          onClick: () => toast('Borttagning avbröts.'),
+        }
+      ]
+    });
+  };
 
   const handleDeleteUser = async (userId: string) => {
     try {
@@ -54,13 +71,13 @@ const UserManagement: React.FC = () => {
       });
       if (response.status === 200) {
         setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
-        toast.success('User deleted successfully.');
+        toast.success('Användaren togs bort!');
       } else {
-        toast.error('Failed to delete user.');
+        toast.error('Misslyckades att ta bort användaren.');
       }
     } catch (err) {
       console.error('Error deleting user:', err);
-      toast.error('An error occurred while deleting user.');
+      toast.error('Ett fel uppstod vid borttagning av användaren.');
     }
   };
 
@@ -88,7 +105,7 @@ const UserManagement: React.FC = () => {
                 <td className="border border-gray-300 p-2">{user.role}</td>
                 <td className="border border-gray-300 p-2">
                   <button
-                    onClick={() => handleDeleteUser(user._id)}
+                    onClick={() => confirmDelete(user._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded"
                   >
                     Delete

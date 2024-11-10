@@ -10,12 +10,12 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="w-screen py-6 px-5 lg:px-64 bg-dark-black flex justify-between text-light-beige drop-shadow-md">
+    <div className=" py-6 px-5  bg-dark-black flex justify-between fixed top-0 left-0 z-50 right-0  text-light-beige drop-shadow-md">
       <span className="text-3xl font-semibold">
         <Link to="/">Antiq</Link>
       </span>
       
-      <ul className="hidden md:flex items-center space-x-5">
+      <ul className="hidden md:flex items-center space-x-10 ">
         
         <li>
           <Link to="/publish">Publicera vara</Link>
@@ -39,7 +39,10 @@ export default function Navbar() {
           <li>
             {(user.role === 'Customer' || user.role === 'Expert') ? (
               <Link to="/dashboard">
+                <div className="grid col-span-1 text-center items-center">
                 <span className="cursor-pointer font-bold">{user.name}</span>
+                <span className=" cursor-pointer font-thin">"{user.role}"</span>
+                </div>
               </Link>
             ) : (
               <span className="font-bold"></span>

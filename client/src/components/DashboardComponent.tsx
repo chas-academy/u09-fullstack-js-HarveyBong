@@ -1,35 +1,27 @@
 import React, { useState } from 'react';
 import FollowedItems from './FollowedItems';
 import UserAds from './UserAds';
-import Item from '../interfaces/Item';
-import { useNavigate } from 'react-router-dom';
+
 import UserSettings from './UserSettings';
 import OffersInbox from './OffersInbox';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(''); 
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const navigate = useNavigate();
-  const handleItemClick = (item: Item) => {
-    console.log(`Item clicked with ID: ${item._id}`); 
-    if (window.innerWidth <= 768) {
-      navigate(`/items/${item._id}`); 
-    } else {
-      setSelectedItem(item); 
-    }
-  };
+ 
+
   
+
   const getTabButtonClasses = (tabName: string) =>
-    `w-full text-left p-4 rounded-md shadow-sm transition duration-300 ${
+    `w-full text-left px-4 py-3 font-semibold rounded-lg shadow-md transition duration-300 ${
       activeTab === tabName
-        ? 'bg-blue-500 text-white'
-        : 'bg-gray-200 hover:bg-gray-300'
+        ? 'bg-greenish-gray text-white opacity-70 hover:opacity-100'
+        : 'bg-light-beige text-dark-black hover:bg-greenish-gray hover:text-white'
     }`;
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-80">
-        <h1 className="text-3xl font-bold mb-6">Konto</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 pt-20 px-5">
+      <div className="w-full max-w-lg p-8 space-y-6 bg-dark-gray rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-center text-light-beige mb-6">Konto</h1>
         <div className="space-y-4">
           <button
             onClick={() => setActiveTab('followed')}

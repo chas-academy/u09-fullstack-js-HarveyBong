@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface Item {
   _id: string;
@@ -19,13 +21,11 @@ const ItemManagement: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error('Ingen token tillgänglig');
         }
 
-       
         const response = await axios.get('http://localhost:8000/api/admin/items', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,24 +48,40 @@ const ItemManagement: React.FC = () => {
     fetchItems();
   }, []);
 
+  const confirmDelete = (itemId: string) => {
+    confirmAlert({
+      title: 'Bekräfta borttagning',
+      message: 'Är du säker på att du vill ta bort denna annons?',
+      buttons: [
+        {
+          label: 'Ja',
+          onClick: () => handleDeleteItem(itemId),
+        },
+        {
+          label: 'Nej',
+          onClick: () => toast('Borttagning avbröts.'),
+        }
+      ]
+    });
+  };
+
   const handleDeleteItem = async (itemId: string) => {
     try {
       const response = await axios.delete(`http://localhost:8000/api/admin/items/${itemId}`, {
         withCredentials: true,
       });
       if (response.status === 200) {
-        setItems((prevUsers) => prevUsers.filter((item) => item._id !== itemId));
-        toast.success('Item deleted successfully.');
+        setItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
+        toast.success('Annonsen togs bort!');
       } else {
-        toast.error('Failed to delete item.');
+        toast.error('Misslyckades att ta bort annonsen.');
       }
     } catch (err) {
-      console.error('Error deleting Item:', err);
-      toast.error('An error occurred while deleting tem.');
+      console.error('Error deleting item:', err);
+      toast.error('Ett fel uppstod vid borttagning av annonsen.');
     }
   };
 
- 
   if (loading) return <p>Loading items...</p>;
   if (error) return <p>{error}</p>;
 
@@ -81,6 +97,7 @@ const ItemManagement: React.FC = () => {
               <th className="border border-gray-300 p-2">Price</th>
               <th className="border border-gray-300 p-2">Created By</th>
               <th className="border border-gray-300 p-2">Image</th>
+              <th className="border border-gray-300 p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -94,8 +111,14 @@ const ItemManagement: React.FC = () => {
                   {item.image && (
                     <img src={item.image} alt={item.title} className="w-16 h-16 object-cover" />
                   )}
-
-                  <td><button onClick={() =>handleDeleteItem(item._id)} className='bg-red-500 text-white px-4 py-2 rounded"' >Ta bort XD</button> </td>
+                </td>
+                <td className="border border-gray-300 p-2">
+                  <button
+                    onClick={() => confirmDelete(item._id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Ta bort
+                  </button>
                 </td>
               </tr>
             ))}
