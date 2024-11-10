@@ -12,7 +12,7 @@ const adminRoutes = require('./routes/adminRoutes');
 //db connection
 mongoose.connect(process.env.MONGO_URL)
 .then(()=> console.log('Mongodb connected') )
-.catch (()=> console.log('db not connected',err))
+.catch (()=> console.log('db not connected'))
 
 //middleware
 app.use(express.json());
