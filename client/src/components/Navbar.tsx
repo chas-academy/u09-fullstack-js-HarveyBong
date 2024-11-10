@@ -10,12 +10,12 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="w-screen py-6 px-5 lg:px-64 bg-slate-100 flex justify-between text-neutral-800 drop-shadow-md">
-      <span className="text-lg font-semibold">
-        <Link to="/">Home</Link>
+    <div className=" py-6 px-5  bg-dark-black flex justify-between fixed top-0 left-0 z-50 right-0  text-light-beige drop-shadow-md">
+      <span className="text-3xl font-semibold">
+        <Link to="/">Antiq</Link>
       </span>
       
-      <ul className="hidden md:flex items-center space-x-5">
+      <ul className="hidden md:flex items-center space-x-10 ">
         
         <li>
           <Link to="/publish">Publicera vara</Link>
@@ -39,7 +39,10 @@ export default function Navbar() {
           <li>
             {(user.role === 'Customer' || user.role === 'Expert') ? (
               <Link to="/dashboard">
+                <div className="grid col-span-1 text-center items-center">
                 <span className="cursor-pointer font-bold">{user.name}</span>
+                <span className=" cursor-pointer font-thin">"{user.role}"</span>
+                </div>
               </Link>
             ) : (
               <span className="font-bold"></span>
@@ -54,23 +57,27 @@ export default function Navbar() {
       </ul>
 
       {/* hamburger menu */}
+      
       <button 
+      
         className="space-y-1 group md:hidden" 
         onClick={() => setMenuOpen(!menuOpen)}
       >
-        <div className="w-6 h-1 bg-black"></div>
-        <div className="w-6 h-1 bg-black"></div>
-        <div className="w-6 h-1 bg-black"></div>
+        <div className="w-6 h-1 bg-light-beige"></div>
+        <div className="w-6 h-1 bg-light-beige"></div>
+        <div className="w-6 h-1 bg-light-beige"></div>
+        
+        
 
         {/* menu */}
         {menuOpen && (
-          <ul className="bg-slate-100 w-screen pb-10 absolute top-0 right-0 duration-150 flex flex-col space-y-3 justify-end">
+          <ul className="bg-dark-black w-screen pb-10 absolute top-0 right-0 duration-150 flex flex-col space-y-3 justify-end">
             <button 
               className="px-10 py-8 relative ml-auto"
               onClick={() => setMenuOpen(false)}
             >
-              <div className="w-6 h-1 rotate-45 absolute bg-black"></div>
-              <div className="w-6 h-1 -rotate-45 absolute bg-black"></div>
+              <div className="w-6 h-1 rotate-45 absolute bg-light-beige"></div>
+              <div className="w-6 h-1 -rotate-45 absolute bg-light-beige"></div>
             </button>
             
             <li className="flex justify-center w-full py-4 hover:bg-gray-200">

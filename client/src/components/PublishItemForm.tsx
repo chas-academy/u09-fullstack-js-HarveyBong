@@ -16,10 +16,12 @@ const PublishItemForm = () => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
   
     const formData = new FormData();
     formData.append('title', title);
@@ -28,9 +30,7 @@ const PublishItemForm = () => {
     if (file) {
       formData.append('image', file);
     }
-    formData.forEach((value, key) => {
-      console.log(`Form data: ${key} = ${value}`);
-    });
+    
     try {
       const response = await axios.post('http://localhost:8000/items', formData, {
         headers: {
@@ -52,38 +52,66 @@ const PublishItemForm = () => {
         console.error('Unexpected error:', error);
       }
       toast.error('Failed to publish the item.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input 
-        type="text" 
-        placeholder="Title" 
-        value={title} 
-        onChange={(e) => setTitle(e.target.value)} 
-        className="border p-2 w-full"
-      />
-      <textarea 
-        placeholder="Description" 
-        value={description} 
-        onChange={(e) => setDescription(e.target.value)} 
-        className="border p-2 w-full"
-      />
-      <input 
-        type="number" 
-        placeholder="Price" 
-        value={price} 
-        onChange={(e) => setPrice(e.target.value)} 
-        className="border p-2 w-full"
-      />
-      <input 
-        type="file" 
-        onChange={(e) => setFile(e.target.files?.[0] || null)} 
-        className="border p-2"
-      />
-      <button type="submit" className="bg-blue-500 mx-2 hover:bg-black text-white p-2 rounded-md">Publish</button>
-    </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-dark-gray rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center text-light-beige">Publicera din annons</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block mb-2 text-sm font-medium text-light-beige">Titel</label>
+            <input
+              type="text"
+              placeholder="Titel"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-4 py-2 text-sm border border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-light-beige">Beskrivning</label>
+            <textarea
+              placeholder="Beskrivning"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-2 text-sm border border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-light-beige">Köpt för:</label>
+            <input
+              type="number"
+              placeholder="Pris"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="w-full px-4 py-2 text-sm border border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-light-beige">Bild</label>
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              className="w-full px-4 py-2 text-sm border border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full px-4 py-2 font-semibold text-white bg-greenish-gray opacity-70 rounded-lg hover:opacity-100 focus:outline-none focus:ring focus:ring-blue-300 transition duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {loading ? 'Publicerar...' : 'Publicera'}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

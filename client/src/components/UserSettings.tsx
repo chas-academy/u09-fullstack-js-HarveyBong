@@ -30,19 +30,19 @@ const UserSettings: React.FC = () => {
   
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-white">
       <h1 className="text-3xl font-bold mb-4">Inställningar</h1>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Användarnamn</label>
+        <label className="block text-sm font-medium">Användarnamn</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+          className="mt-1 p-2 block w-full border text-black border-gray-300 rounded-md"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">E-postadress</label>
+        <label className="block text-sm font-medium">E-postadress</label>
         <input
           type="email"
           value={email}
@@ -51,7 +51,7 @@ const UserSettings: React.FC = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Lösenord</label>
+        <label className="block text-sm font-medium ">Lösenord</label>
         <input
           type="password"
           value={password}
@@ -61,7 +61,7 @@ const UserSettings: React.FC = () => {
       </div>
       <button
         onClick={handleSaveChanges}
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+        className="bg-greenish-gray text-white p-2 rounded-md hover:bg-greenish-gray/90"
       >
         Spara ändringar
       </button>

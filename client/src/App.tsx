@@ -18,6 +18,7 @@ import UserManagement from './components/Admin/UserManagement';
 import ItemManagement from './components/Admin/ItemManagement';
 import { useContext,  } from 'react';
 import AdminPage from './components/Admin/AdminPage';
+import Footer from './components/Footer';
 
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
@@ -37,7 +38,9 @@ function App() {
   return (
     <>
       <UserContextProvider>
+        
         <Navbar />
+        <div className='pt-20 '></div>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -86,6 +89,8 @@ function App() {
             }
           />
         </Routes>
+
+        <Footer/>
       </UserContextProvider>
     </>
   );
