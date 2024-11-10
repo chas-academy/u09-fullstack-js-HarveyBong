@@ -12,8 +12,7 @@ import Publish from './pages/Publish';
 import ProtectedRoute from './components/ProtectedRoute';
 import ItemList from './components/ItemList'; 
 import ItemDetails from './components/ItemDetails'; 
-import SearchableItemList from './components/SearchableItemList';
-import OfferManagement from './components/Admin/OfferManagement';
+
 import UserManagement from './components/Admin/UserManagement';
 import ItemManagement from './components/Admin/ItemManagement';
 import { useContext,  } from 'react';

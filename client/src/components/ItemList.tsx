@@ -29,7 +29,7 @@ const ItemList: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/items', {
+        const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/items', {
           withCredentials: true,
         });
         if (response.status === 200) {

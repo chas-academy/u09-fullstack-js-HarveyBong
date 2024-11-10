@@ -15,7 +15,7 @@ const OffersInbox: React.FC = () => {
       try {
         if (!userContext?.user) return;
 
-        const response = await axios.get(`http://localhost:8000/api/offers/user/${userContext.user._id}`, {
+        const response = await axios.get(`https://u09-fullstack-js-harveybong.onrender.com/api/offers/user/${userContext.user._id}`, {
           withCredentials: true,
         });
 

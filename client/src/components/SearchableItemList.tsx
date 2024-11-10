@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ItemDetails from "./ItemDetails"; // Importera ItemDetails-komponenten
 import Item from "../interfaces/Item";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 import toast from "react-hot-toast";
-import { UserContext } from "../../context/userContext";
+
 
 const SearchableItemList: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -13,13 +13,13 @@ const SearchableItemList: React.FC = () => {
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
   const [followedItems, setFollowedItems] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const userContext = useContext(UserContext);
+ 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/items", {
+        const response = await axios.get("https://u09-fullstack-js-harveybong.onrender.com/items", {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -36,7 +36,7 @@ const SearchableItemList: React.FC = () => {
   useEffect(() => {
     const fetchFollowedItems = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/followed", {
+        const response = await axios.get("https://u09-fullstack-js-harveybong.onrender.com/followed", {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -67,7 +67,7 @@ const SearchableItemList: React.FC = () => {
   const handleFollow = async (itemId: string) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/follow/${itemId}`,
+        `https://u09-fullstack-js-harveybong.onrender.com/follow/${itemId}`,
         {},
         {
           withCredentials: true,
@@ -92,7 +92,7 @@ const SearchableItemList: React.FC = () => {
   const handleUnfollow = async (itemId: string) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/unfollow/${itemId}`,
+        `https://u09-fullstack-js-harveybong.onrender.com/unfollow/${itemId}`,
         {},
         {
           withCredentials: true,

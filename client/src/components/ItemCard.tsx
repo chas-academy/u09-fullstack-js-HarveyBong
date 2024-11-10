@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+
 
 interface ItemProps {
   itemId: string;
@@ -7,12 +7,12 @@ interface ItemProps {
   isFollowed: boolean; // Kolla om annonsen redan är följd
 }
 
-const ItemCard: React.FC<ItemProps> = ({ itemId, title, isFollowed }) => {
+const ItemCard: React.FC<ItemProps> = ({ title, isFollowed }) => {
   const [followed, setFollowed] = useState(isFollowed);
 
   const handleFollow = async () => {
     try {
-      const response = await axios.put(`/followed/${itemId}`);
+     
       setFollowed(!followed);
     } catch (error) {
       console.error("Error following item", error);

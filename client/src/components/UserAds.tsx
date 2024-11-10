@@ -12,7 +12,7 @@ const UserAds: React.FC = () => {
   useEffect(() => {
     const fetchUserAds = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/my-ads", {
+        const response = await axios.get("https://u09-fullstack-js-harveybong.onrender.com/my-ads", {
           withCredentials: true,
         });
         if (response.status === 200) {

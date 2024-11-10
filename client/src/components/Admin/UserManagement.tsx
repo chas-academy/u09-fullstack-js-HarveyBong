@@ -25,7 +25,7 @@ const UserManagement: React.FC = () => {
           setLoading(false);
           return;
         }
-        const response = await axios.get('http://localhost:8000/api/admin/users', {
+        const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/api/admin/users', {
           headers: {
             Authorization: `Bearer ${token}`, 
           },
@@ -66,7 +66,7 @@ const UserManagement: React.FC = () => {
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/admin/users/${userId}`, {
+      const response = await axios.delete(`https://u09-fullstack-js-harveybong.onrender.com/api/admin/users/${userId}`, {
         withCredentials: true,
       });
       if (response.status === 200) {
