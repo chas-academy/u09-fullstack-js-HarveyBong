@@ -22,6 +22,10 @@ import Footer from './components/Footer';
 axios.defaults.baseURL = 'https://u09-fullstack-js-harveybong.onrender.com';
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+axios.interceptors.request.use((config) => {
+  console.log('Outgoing request:', config);
+  return config;
+});
 function RequireAdmin({ children }: { children: JSX.Element }) {
   const userContext = useContext(UserContext); // Make sure to use useContext here
 

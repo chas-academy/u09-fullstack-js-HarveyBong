@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 // Middleware för att skydda routes
 const requireAuth = (req, res, next) => {
   const { token } = req.cookies; // Hämta token från cookies
- 
-
+  
   if (!token) {
+    console.error('No token found in cookies:', req.cookies);
     return res.status(401).json({ error: 'Access Denied. No token provided.' });
   }
 
@@ -13,8 +13,8 @@ const requireAuth = (req, res, next) => {
     // Verifiera token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-
     if (decoded && decoded.userId) {
+      console.log('Token verified successfully:', decoded);
       req.user = { userId: decoded.userId }; 
       next(); 
     } else {
