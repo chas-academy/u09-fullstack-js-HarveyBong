@@ -84,7 +84,7 @@ const PublishItemForm = () => {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-light-beige">Köpt för:</label>
+            <label className="block mb-2 text-sm font-medium text-light-beige">Köpt för</label>
             <input
               type="number"
               placeholder="Pris"
@@ -99,7 +99,7 @@ const PublishItemForm = () => {
             <input
               type="file"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="w-full px-4 py-2 text-sm border border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
+              className="w-full px-4 py-2 text-sm border text-light-beige border-greenish-gray rounded-lg focus:outline-none focus:ring focus:ring-greenish-gray"
             />
           </div>
           <button
