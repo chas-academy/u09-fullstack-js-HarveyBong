@@ -19,7 +19,7 @@ import { useContext,  } from 'react';
 import AdminPage from './components/Admin/AdminPage';
 import Footer from './components/Footer';
 
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'https://u09-fullstack-js-harveybong.onrender.com';
 axios.defaults.withCredentials = true;
 function RequireAdmin({ children }: { children: JSX.Element }) {
   const userContext = useContext(UserContext); // Make sure to use useContext here
