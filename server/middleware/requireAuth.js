@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 // Middleware för att skydda routes
 const requireAuth = (req, res, next) => {
-  const { token } = req.cookies; // Hämta token från cookies
+  const token = req.headers.authorization?.split(' ')[1]; // Hämta token från cookies
   
   if (!token) {
     console.error('No token found in cookies:', req.cookies);
