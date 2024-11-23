@@ -41,7 +41,7 @@ export default function Login() {
         if (responseData.user.role === 'Admin') {
           navigate('/admin/adminpage');
         } else {
-          navigate(-1);
+          navigate('/');
         }
       }
     } catch (error) {
