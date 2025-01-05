@@ -176,40 +176,28 @@ const UserManagement: React.FC = () => {
       </form>
 
       {users.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-sm">
-                <th className="border border-gray-300 p-2">Name</th>
-                <th className="border border-gray-300 p-2">Email</th>
-                <th className="border border-gray-300 p-2">Role</th>
-                <th className="border border-gray-300 p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id} className="text-center text-sm">
-                  <td className="border border-gray-300 p-2">{user.name}</td>
-                  <td className="border border-gray-300 p-2">{user.email}</td>
-                  <td className="border border-gray-300 p-2">{user.role}</td>
-                  <td className="border border-gray-300 p-2">
-                    <button
-                      onClick={() => handleEditClick(user)}
-                      className="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
-                    >
-                      Redigera
-                    </button>
-                    <button
-                      onClick={() => confirmDelete(user._id)}
-                      className="bg-red-500 text-white py-1 px-2 rounded text-xs"
-                    >
-                      Radera
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {users.map((user) => (
+            <div key={user._id} className="border rounded p-4 bg-white shadow-md">
+              <p className="font-bold mb-2">Name: {user.name}</p>
+              <p className="mb-2">Email: {user.email}</p>
+              <p className="mb-4">Role: {user.role}</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEditClick(user)}
+                  className="bg-yellow-500 text-white py-1 px-2 rounded text-xs"
+                >
+                  Redigera
+                </button>
+                <button
+                  onClick={() => confirmDelete(user._id)}
+                  className="bg-red-500 text-white py-1 px-2 rounded text-xs"
+                >
+                  Radera
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <p>No users found.</p>
