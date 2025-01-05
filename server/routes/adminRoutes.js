@@ -11,6 +11,47 @@ router.use(requireAuth);
 router.use(requireAdmin);
 
 // ---------------------- User Management ----------------------
+// POST - Skapa en ny användare
+router.post('/users', async (req, res) => {
+  const { name, email, password, role } = req.body;
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword, role });
+    await newUser.save();
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Failed to create user.' });
+  }
+});
+
+// PUT - Uppdatera en användare
+router.put('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { name, email, role } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.role = role || user.role;
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user.' });
+  }
+});
 
 // GET - Hämta alla användare
 router.get('/users', async (req, res) => {

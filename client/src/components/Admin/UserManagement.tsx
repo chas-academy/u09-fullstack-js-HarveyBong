@@ -15,6 +15,9 @@ const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [formState, setFormState] = useState({ name: '', email: '', password: '', role: '' });
+  const [editMode, setEditMode] = useState(false);
+  const [editUserId, setEditUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -81,12 +84,96 @@ const UserManagement: React.FC = () => {
     }
   };
 
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const url = editMode
+      ? `https://u09-fullstack-js-harveybong.onrender.com/api/admin/users/${editUserId}`
+      : `https://u09-fullstack-js-harveybong.onrender.com/api/admin/users`;
+
+    const method = editMode ? 'PUT' : 'POST';
+
+    try {
+      const response = await axios({
+        method,
+        url,
+        headers: { Authorization: `Bearer ${token}` },
+        data: formState,
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success(`Användaren ${editMode ? 'uppdaterades' : 'skapades'}!`);
+        setUsers((prevUsers) =>
+          editMode
+            ? prevUsers.map((user) =>
+                user._id === editUserId ? response.data : user
+              )
+            : [...prevUsers, response.data]
+        );
+        setEditMode(false);
+        setEditUserId(null);
+        setFormState({ name: '', email: '', password: '', role: '' });
+      }
+    } catch (error) {
+      toast.error('Ett fel uppstod vid operationen.');
+    }
+  };
+
+  const handleEditClick = (user: User) => {
+    setEditMode(true);
+    setEditUserId(user._id);
+    setFormState({ name: user.name, email: user.email, password: '', role: user.role });
+  };
+
   if (loading) return <p>Loading users...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">User Management</h2>
+
+      <form onSubmit={handleFormSubmit} className="mb-6">
+        <input
+          type="text"
+          placeholder="Namn"
+          value={formState.name}
+          onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+          required
+          className="border p-2 mr-2"
+        />
+        <input
+          type="email"
+          placeholder="E-post"
+          value={formState.email}
+          onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+          required
+          className="border p-2 mr-2"
+        />
+        {!editMode && (
+          <input
+            type="password"
+            placeholder="Lösenord"
+            value={formState.password}
+            onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+            required
+            className="border p-2 mr-2"
+          />
+        )}
+        <select
+          value={formState.role}
+          onChange={(e) => setFormState({ ...formState, role: e.target.value })}
+          required
+          className="border p-2 mr-2"
+        >
+          <option value="">Välj roll</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          {editMode ? 'Uppdatera' : 'Skapa'}
+        </button>
+      </form>
+
       {users.length > 0 ? (
         <table className="w-full border-collapse border border-gray-300">
           <thead>
@@ -104,6 +191,12 @@ const UserManagement: React.FC = () => {
                 <td className="border border-gray-300 p-2">{user.email}</td>
                 <td className="border border-gray-300 p-2">{user.role}</td>
                 <td className="border border-gray-300 p-2">
+                  <button
+                    onClick={() => handleEditClick(user)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                  >
+                    Redigera
+                  </button>
                   <button
                     onClick={() => confirmDelete(user._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded"
