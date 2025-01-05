@@ -166,9 +166,9 @@ const UserManagement: React.FC = () => {
           className="border p-2 mr-2"
         >
           <option value="">Välj roll</option>
-          <option value="admin">Admin</option>
-          <option value="customer">Customer</option>
-          <option value="expert">Expert</option>
+          <option value="Admin">Admin</option>
+          <option value="Customer">Customer</option>
+          <option value="Expert">Expert</option>
         </select>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           {editMode ? 'Uppdatera' : 'Skapa'}
