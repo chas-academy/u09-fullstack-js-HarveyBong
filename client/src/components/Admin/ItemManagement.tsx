@@ -60,8 +60,8 @@ const ItemManagement: React.FC = () => {
         {
           label: 'Nej',
           onClick: () => toast('Borttagning avbröts.'),
-        }
-      ]
+        },
+      ],
     });
   };
 
@@ -86,44 +86,35 @@ const ItemManagement: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Item Management</h2>
+    <div className="p-4 sm:p-6 md:p-8">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">Item Management</h2>
+
       {items.length > 0 ? (
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2">Title</th>
-              <th className="border border-gray-300 p-2">Description</th>
-              <th className="border border-gray-300 p-2">Price</th>
-              <th className="border border-gray-300 p-2">Created By</th>
-              <th className="border border-gray-300 p-2">Image</th>
-              <th className="border border-gray-300 p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item._id} className="text-center">
-                <td className="border border-gray-300 p-2">{item.title}</td>
-                <td className="border border-gray-300 p-2">{item.description}</td>
-                <td className="border border-gray-300 p-2">{item.price} kr</td>
-                <td className="border border-gray-300 p-2">{item.createdBy.name}</td>
-                <td className="border border-gray-300 p-2">
-                  {item.image && (
-                    <img src={item.image} alt={item.title} className="w-16 h-16 object-cover" />
-                  )}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  <button
-                    onClick={() => confirmDelete(item._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Ta bort
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {items.map((item) => (
+            <div key={item._id} className="border rounded p-4 bg-white shadow-md">
+              <p className="font-bold mb-2">Title: {item.title}</p>
+              <p className="mb-2">Description: {item.description}</p>
+              <p className="mb-2">Price: {item.price} kr</p>
+              <p className="mb-2">Created By: {item.createdBy.name}</p>
+              {item.image && (
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-32 object-cover rounded mb-4"
+                />
+              )}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => confirmDelete(item._id)}
+                  className="bg-red-500 text-white py-1 px-2 rounded text-xs"
+                >
+                  Radera
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>No items found.</p>
       )}
