@@ -5,6 +5,10 @@ const Item = require('../models/Item');
 const Offer = require('../models/Offer');
 const requireAuth = require('../middleware/requireAuth');
 const requireAdmin = require('../middleware/requireAdmin');
+const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
+
 
 
 router.use(requireAuth);
