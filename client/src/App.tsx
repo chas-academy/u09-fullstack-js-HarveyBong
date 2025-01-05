@@ -1,50 +1,44 @@
-import './App.css';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import axios from 'axios';
-import Home from './pages/Home';
-import { Toaster } from 'react-hot-toast';
+import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import axios from "axios";
+import Home from "./pages/Home";
+import { Toaster } from "react-hot-toast";
 import { UserContextProvider, UserContext } from "../context/userContext";
-import Dashboard from './pages/Dashboard';
-import Publish from './pages/Publish';
-import ProtectedRoute from './components/ProtectedRoute';
-import ItemList from './components/ItemList'; 
-import ItemDetails from './components/ItemDetails'; 
+import Dashboard from "./pages/Dashboard";
+import Publish from "./pages/Publish";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ItemList from "./components/ItemList";
+import ItemDetails from "./components/ItemDetails";
 
-import UserManagement from './components/Admin/UserManagement';
-import ItemManagement from './components/Admin/ItemManagement';
-import { useContext,  } from 'react';
-import AdminPage from './components/Admin/AdminPage';
-import Footer from './components/Footer';
+import UserManagement from "./components/Admin/UserManagement";
+import ItemManagement from "./components/Admin/ItemManagement";
+import { useContext } from "react";
+import AdminPage from "./components/Admin/AdminPage";
+import Footer from "./components/Footer";
 
-axios.defaults.baseURL = 'https://u09-fullstack-js-harveybong.onrender.com';
+axios.defaults.baseURL = "https://u09-fullstack-js-harveybong.onrender.com";
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-axios.interceptors.request.use((config) => {
-  console.log('Outgoing request:', config);
-  return config;
-});
-function RequireAdmin({ children }: { children: JSX.Element }) {
-  const userContext = useContext(UserContext); // Make sure to use useContext here
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "token"
+)}`;
 
-  if (!userContext?.user || userContext.user.role !== 'Admin') {
+function RequireAdmin({ children }: { children: JSX.Element }) {
+  const userContext = useContext(UserContext);
+
+  if (!userContext?.user || userContext.user.role !== "Admin") {
     return <Navigate to="/" />;
   }
   return children;
-
-  
 }
 function App() {
-  
-
   return (
     <>
       <UserContextProvider>
-        
         <Navbar />
-        <div className='pt-20 '></div>
+        <div className="pt-20 "></div>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -94,11 +88,10 @@ function App() {
           />
         </Routes>
 
-        <Footer/>
+        <Footer />
       </UserContextProvider>
     </>
   );
 }
-
 
 export default App;

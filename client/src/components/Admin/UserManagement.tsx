@@ -30,7 +30,7 @@ const UserManagement: React.FC = () => {
         }
         const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/api/admin/users', {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
         });
@@ -62,8 +62,8 @@ const UserManagement: React.FC = () => {
         {
           label: 'Nej',
           onClick: () => toast('Borttagning avbröts.'),
-        }
-      ]
+        },
+      ],
     });
   };
 
@@ -129,17 +129,17 @@ const UserManagement: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">User Management</h2>
+    <div className="p-4 sm:p-6 md:p-8">
+      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">User Management</h2>
 
-      <form onSubmit={handleFormSubmit} className="mb-6">
+      <form onSubmit={handleFormSubmit} className="flex flex-col gap-4 mb-6">
         <input
           type="text"
           placeholder="Namn"
           value={formState.name}
           onChange={(e) => setFormState({ ...formState, name: e.target.value })}
           required
-          className="border p-2 mr-2"
+          className="border p-2 rounded"
         />
         <input
           type="email"
@@ -147,7 +147,7 @@ const UserManagement: React.FC = () => {
           value={formState.email}
           onChange={(e) => setFormState({ ...formState, email: e.target.value })}
           required
-          className="border p-2 mr-2"
+          className="border p-2 rounded"
         />
         {!editMode && (
           <input
@@ -156,59 +156,61 @@ const UserManagement: React.FC = () => {
             value={formState.password}
             onChange={(e) => setFormState({ ...formState, password: e.target.value })}
             required
-            className="border p-2 mr-2"
+            className="border p-2 rounded"
           />
         )}
         <select
           value={formState.role}
           onChange={(e) => setFormState({ ...formState, role: e.target.value })}
           required
-          className="border p-2 mr-2"
+          className="border p-2 rounded"
         >
           <option value="">Välj roll</option>
           <option value="Admin">Admin</option>
           <option value="Customer">Customer</option>
           <option value="Expert">Expert</option>
         </select>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
           {editMode ? 'Uppdatera' : 'Skapa'}
         </button>
       </form>
 
       {users.length > 0 ? (
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2">Name</th>
-              <th className="border border-gray-300 p-2">Email</th>
-              <th className="border border-gray-300 p-2">Role</th>
-              <th className="border border-gray-300 p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user._id} className="text-center">
-                <td className="border border-gray-300 p-2">{user.name}</td>
-                <td className="border border-gray-300 p-2">{user.email}</td>
-                <td className="border border-gray-300 p-2">{user.role}</td>
-                <td className="border border-gray-300 p-2">
-                  <button
-                    onClick={() => handleEditClick(user)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                  >
-                    Redigera
-                  </button>
-                  <button
-                    onClick={() => confirmDelete(user._id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200 text-sm">
+                <th className="border border-gray-300 p-2">Name</th>
+                <th className="border border-gray-300 p-2">Email</th>
+                <th className="border border-gray-300 p-2">Role</th>
+                <th className="border border-gray-300 p-2">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id} className="text-center text-sm">
+                  <td className="border border-gray-300 p-2">{user.name}</td>
+                  <td className="border border-gray-300 p-2">{user.email}</td>
+                  <td className="border border-gray-300 p-2">{user.role}</td>
+                  <td className="border border-gray-300 p-2">
+                    <button
+                      onClick={() => handleEditClick(user)}
+                      className="bg-yellow-500 text-white py-1 px-2 rounded text-xs mr-2"
+                    >
+                      Redigera
+                    </button>
+                    <button
+                      onClick={() => confirmDelete(user._id)}
+                      className="bg-red-500 text-white py-1 px-2 rounded text-xs"
+                    >
+                      Radera
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>No users found.</p>
       )}
