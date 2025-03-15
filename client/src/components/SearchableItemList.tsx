@@ -124,7 +124,7 @@ const SearchableItemList: React.FC = () => {
     <div className="container mx-auto min-h-screen p-6">
       <input
         type="text"
-        placeholder="Sök efter bostäder..."
+        placeholder="Sök efter annonser..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="p-2 border border-gray-300 rounded w-full mb-6"
@@ -199,7 +199,7 @@ const SearchableItemList: React.FC = () => {
             ))
           ) : (
             <p className="text-center text-gray-500">
-              Inga bostäder matchade din sökning.
+              Inga annonser matchade din sökning.
             </p>
           )}
         </div>
