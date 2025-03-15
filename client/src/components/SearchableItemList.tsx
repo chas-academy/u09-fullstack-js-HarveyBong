@@ -132,7 +132,7 @@ const SearchableItemList: React.FC = () => {
 
       <div className="md:grid md:grid-cols-2 gap-4">
         <div
-          className="md:col-span-1 space-y-4 overflow-y-auto"
+          className="md:col-span-1 space-y-4 overflow-y-auto md:my-20"
           style={{ maxHeight: "80vh" }}
         >
           {Array.isArray(filteredItems) ? (

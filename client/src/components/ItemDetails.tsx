@@ -89,7 +89,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item: propItem }) => {
   if (error) return <p>{error}</p>;
 
   return item ? (
-    <div className="p-4 border rounded-lg shadow-md">
+    <div className="p-4 border rounded-lg shadow-md md:container md:my-20">
       <button onClick={handleBackClick} className="md:hidden mb-4 px-4 py-2 bg-dark-gray text-white rounded-md flex items-center">
         <IoIosArrowBack className="mr-2" /> Tillbaka
       </button>
@@ -129,7 +129,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item: propItem }) => {
 </div>
 
       {/* Offer form */}
-      <div className="mt-4">
+      <div className="mt-4 ">
         <input
           type="number"
           placeholder="Ange offertpris (kr)"

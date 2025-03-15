@@ -1,10 +1,18 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
+import { UserContext } from '../../context/userContext';
 
 const UserSettings: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("UserContext must be used within a UserContextProvider");
+  }
+  const { user, setUser } = userContext;
+  const [username, setUsername] = useState<string>(user?.name || ''); 
+  const [email, setEmail] = useState<string>(user?.email || '');
   const [password, setPassword] = useState<string>('');
 
   const handleSaveChanges = async () => {
@@ -13,18 +21,22 @@ const UserSettings: React.FC = () => {
         username,
         email,
         password,
-      }, {
-        withCredentials: true, 
-      });
-  
+      }, { withCredentials: true });
+
       if (response.status === 200) {
-        toast.success('Profile updated successfully!');
+        toast.success('Profilen uppdaterades!');
+        
+        // Uppdatera användarnamnet direkt i UserContext
+        setUser((prevUser) => prevUser ? { ...prevUser, name: username } : null);
+
+        // Spara den uppdaterade användaren i localStorage
+        localStorage.setItem('user', JSON.stringify({ ...user, name: username }));
       } else {
-        toast.error('Failed to update profile');
+        toast.error('Misslyckades med att uppdatera profilen');
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('An error occurred while updating the profile');
+      console.error('Fel vid uppdatering:', error);
+      toast.error('Ett fel inträffade vid uppdatering av profilen');
     }
   };
   

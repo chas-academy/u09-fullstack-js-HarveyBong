@@ -10,7 +10,6 @@ import { UserContextProvider, UserContext } from "../context/userContext";
 import Dashboard from "./pages/Dashboard";
 import Publish from "./pages/Publish";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ItemList from "./components/ItemList";
 import ItemDetails from "./components/ItemDetails";
 
 import UserManagement from "./components/Admin/UserManagement";
@@ -60,7 +59,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/items" element={<ItemList />} />
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route
             path="/admin/adminpage"
