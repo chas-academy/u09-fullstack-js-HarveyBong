@@ -19,7 +19,7 @@ import { useContext } from "react";
 import AdminPage from "./components/Admin/AdminPage";
 import Footer from "./components/Footer";
 
-axios.defaults.baseURL = "https://u09-fullstack-js-harveybong.onrender.com";
+axios.defaults.baseURL = `${import.meta.env.VITE_RENDER_URL}`;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "token"

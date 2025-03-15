@@ -26,7 +26,7 @@ const ItemManagement: React.FC = () => {
           throw new Error('Ingen token tillgänglig');
         }
 
-        const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/api/admin/items', {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/api/admin/items`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -67,7 +67,7 @@ const ItemManagement: React.FC = () => {
 
   const handleDeleteItem = async (itemId: string) => {
     try {
-      const response = await axios.delete(`https://u09-fullstack-js-harveybong.onrender.com/api/admin/items/${itemId}`, {
+      const response = await axios.delete(`${import.meta.env.VITE_RENDER_URL}/api/admin/items/${itemId}`, {
         withCredentials: true,
       });
       if (response.status === 200) {

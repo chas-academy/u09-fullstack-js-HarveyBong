@@ -18,6 +18,7 @@ const UserManagement: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', password: '', role: '' });
   const [editMode, setEditMode] = useState(false);
   const [editUserId, setEditUserId] = useState<string | null>(null);
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,7 +29,7 @@ const UserManagement: React.FC = () => {
           setLoading(false);
           return;
         }
-        const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/api/admin/users', {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/api/admin/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -69,7 +70,7 @@ const UserManagement: React.FC = () => {
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      const response = await axios.delete(`https://u09-fullstack-js-harveybong.onrender.com/api/admin/users/${userId}`, {
+      const response = await axios.delete(`${import.meta.env.VITE_RENDER_URL}/api/admin/users/${userId}`, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -88,8 +89,8 @@ const UserManagement: React.FC = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     const url = editMode
-      ? `https://u09-fullstack-js-harveybong.onrender.com/api/admin/users/${editUserId}`
-      : `https://u09-fullstack-js-harveybong.onrender.com/api/admin/users`;
+      ? `${import.meta.env.VITE_RENDER_URL}/api/admin/users/${editUserId}`
+      : `${import.meta.env.VITE_RENDER_URL}/api/admin/users`;
 
     const method = editMode ? 'PUT' : 'POST';
 

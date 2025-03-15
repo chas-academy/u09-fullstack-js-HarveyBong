@@ -9,7 +9,7 @@ const UserSettings: React.FC = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.put('https://u09-fullstack-js-harveybong.onrender.com/update-profile', {
+      const response = await axios.put(`${import.meta.env.VITE_RENDER_URL}/update-profile`, {
         username,
         email,
         password,

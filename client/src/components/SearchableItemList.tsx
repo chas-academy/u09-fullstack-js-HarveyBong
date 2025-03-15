@@ -19,7 +19,7 @@ const SearchableItemList: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("https://u09-fullstack-js-harveybong.onrender.com/items", {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/items`, {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -36,7 +36,7 @@ const SearchableItemList: React.FC = () => {
   useEffect(() => {
     const fetchFollowedItems = async () => {
       try {
-        const response = await axios.get("https://u09-fullstack-js-harveybong.onrender.com/followed", {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/followed`, {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -67,7 +67,7 @@ const SearchableItemList: React.FC = () => {
   const handleFollow = async (itemId: string) => {
     try {
       const response = await axios.post(
-        `https://u09-fullstack-js-harveybong.onrender.com/follow/${itemId}`,
+        `${import.meta.env.VITE_RENDER_URL}/follow/${itemId}`,
         {},
         {
           withCredentials: true,
@@ -92,7 +92,7 @@ const SearchableItemList: React.FC = () => {
   const handleUnfollow = async (itemId: string) => {
     try {
       const response = await axios.post(
-        `https://u09-fullstack-js-harveybong.onrender.com/unfollow/${itemId}`,
+        `${import.meta.env.VITE_RENDER_URL}/unfollow/${itemId}`,
         {},
         {
           withCredentials: true,

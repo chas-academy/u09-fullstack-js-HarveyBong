@@ -12,7 +12,7 @@ const FollowedItems: React.FC = () => {
   useEffect(() => {
     const fetchFollowedItems = async () => {
       try {
-        const response = await axios.get('https://u09-fullstack-js-harveybong.onrender.com/followed', {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/followed`, {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -29,7 +29,7 @@ const FollowedItems: React.FC = () => {
 
   const handleUnfollow = async (itemId: string) => {
     try {
-      const response = await axios.post(`https://u09-fullstack-js-harveybong.onrender.com/unfollow/${itemId}`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_RENDER_URL}/unfollow/${itemId}`, {}, {
         withCredentials: true,
       });
       if (response.status === 200) {

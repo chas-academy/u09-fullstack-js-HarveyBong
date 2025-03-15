@@ -32,7 +32,7 @@ const PublishItemForm = () => {
     }
     
     try {
-      const response = await axios.post('https://u09-fullstack-js-harveybong.onrender.com/items', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_RENDER_URL}/items`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

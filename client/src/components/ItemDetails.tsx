@@ -26,7 +26,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item: propItem }) => {
     if (!propItem && id) {
       const fetchItem = async () => {
         try {
-          const response = await axios.get(`https://u09-fullstack-js-harveybong.onrender.com/items/${id}`);
+          const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/items/${id}`);
           if (response.status === 200) {
             setItem(response.data);
           } else {
@@ -62,7 +62,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ item: propItem }) => {
       }
 
       const response = await axios.post(
-        'https://u09-fullstack-js-harveybong.onrender.com/api/offers',
+        `${import.meta.env.VITE_RENDER_URL}/api/offers`,
         {
           itemId: item?._id,
           amount: offerPrice,
