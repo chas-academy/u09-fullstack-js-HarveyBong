@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ItemDetails from "./ItemDetails"; // Importera ItemDetails-komponenten
+import ItemDetails from "./ItemDetails";
 import Item from "../interfaces/Item";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
@@ -135,7 +135,8 @@ const SearchableItemList: React.FC = () => {
           className="md:col-span-1 space-y-4 overflow-y-auto"
           style={{ maxHeight: "80vh" }}
         >
-          {filteredItems.length > 0 ? (
+          {Array.isArray(filteredItems) ? (
+            
             filteredItems.map((item) => (
               <div
                 key={item._id}

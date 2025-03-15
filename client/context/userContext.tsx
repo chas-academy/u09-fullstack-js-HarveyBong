@@ -60,6 +60,7 @@ export function UserContextProvider({ children }: UserContextProviderProps) {
         .get('/profile', { withCredentials: true })
         .then(({ data }) => {
           console.log('Fetched user profile data:', data);
+          console.log('Env render url:', import.meta.env.VITE_RENDER_URL);
           setUser(data);
           localStorage.setItem('user', JSON.stringify(data));
         })

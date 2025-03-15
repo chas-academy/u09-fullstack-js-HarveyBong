@@ -1,6 +1,7 @@
 const express =require('express');
 const dotenv = require('dotenv').config();
 console.log('JWT_SECRET:', process.env.JWT_SECRET);
+console.log('RENDER_URL:', process.env.VITE_RENDER_URL);
 const cors =require('cors');
 const app =express();
 const {mongoose} = require('mongoose');
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin: 'https://antiq.netlify.app',
+    origin: [ 'https://antiq.netlify.app', 'http://localhost:5173' ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
   }));

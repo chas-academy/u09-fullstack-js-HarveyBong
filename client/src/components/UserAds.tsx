@@ -30,7 +30,7 @@ const UserAds: React.FC = () => {
   const handleDeleteAd = async (itemId: string) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/items/${itemId}`,
+        `${import.meta.env.VITE_RENDER_URL}/items/${itemId}`,
         {
           withCredentials: true,
         }

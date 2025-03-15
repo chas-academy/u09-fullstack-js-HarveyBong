@@ -50,7 +50,7 @@ const ItemList: React.FC = () => {
   useEffect(() => {
     const fetchFollowedItems = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/followed', {
+        const response = await axios.get(`${import.meta.env.VITE_RENDER_URL}/followed`, {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -77,7 +77,7 @@ const ItemList: React.FC = () => {
 
   const handleFollow = async (itemId: string) => {
     try {
-      const response = await axios.post(`http://localhost:8000/follow/${itemId}`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_RENDER_URL}/follow/${itemId}`, {}, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -98,7 +98,7 @@ const ItemList: React.FC = () => {
 
   const handleUnfollow = async (itemId: string) => {
     try {
-      const response = await axios.post(`http://localhost:8000/unfollow/${itemId}`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_RENDER_URL}/unfollow/${itemId}`, {}, {
         withCredentials: true,
       });
       if (response.status === 200) {
