@@ -78,14 +78,14 @@ const SearchableItemList: React.FC = () => {
         if (followedItem) {
           setFollowedItems((prev) => [...prev, followedItem]);
         }
-        toast.success("Bostad följs nu!");
+        toast.success("Produkt följs nu!");
       } else {
         console.error("Failed to follow item", response.status);
-        toast.error("Misslyckades att följa bostaden.");
+        toast.error("Misslyckades att följa produkten.");
       }
     } catch (err) {
       console.error("Error following item", err);
-      toast.error("Misslyckades att följa bostaden.");
+      toast.error("Misslyckades att följa produkten.");
     }
   };
 
@@ -100,14 +100,14 @@ const SearchableItemList: React.FC = () => {
       );
       if (response.status === 200) {
         setFollowedItems((prev) => prev.filter((item) => item._id !== itemId));
-        toast.success("Bostad avföljd!");
+        toast.success("Produkt avföljd!");
       } else {
         console.error("Failed to unfollow item", response.status);
-        toast.error("Misslyckades att avfölja bostaden.");
+        toast.error("Misslyckades att avfölja produkten.");
       }
     } catch (err) {
       console.error("Error unfollowing item", err);
-      toast.error("Misslyckades att avfölja bostaden.");
+      toast.error("Misslyckades att avfölja produkten.");
     }
   };
 
