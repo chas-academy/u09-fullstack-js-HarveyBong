@@ -189,7 +189,7 @@ const SearchableItemList: React.FC = () => {
                       )}
                     </button>
                   </div>
-                  <p>{item.createdBy.name}</p>
+                  <p>{item.createdBy?.name || "Okänd användare"}</p>
                   
                   <p className="text-lg font-semibold mt-2">
                     {item.price.toLocaleString()} kr

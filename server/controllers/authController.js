@@ -85,18 +85,25 @@ const loginUser = async (req, res) => {
 
       
       res
-        .cookie('token', accessToken, { httpOnly: true })
-        .cookie('refreshToken', refreshToken, { httpOnly: true })
-       
-        .json({
-          user: {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-          },
-          token: accessToken, 
-        });
+      .cookie('token', accessToken, { 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax" 
+      })
+      .cookie('refreshToken', refreshToken, { 
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax" 
+      })
+      .json({
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+        token: accessToken, 
+      });
     } else {
       res.status(400).json({
         error: "Wrong password, try again!",

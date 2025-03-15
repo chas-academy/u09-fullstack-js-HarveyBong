@@ -22,7 +22,8 @@ app.use(express.urlencoded({extended:false}));
 app.use(cors({
     origin: [ 'https://antiq.netlify.app', 'http://localhost:5173' ],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   }));
 
 
@@ -42,31 +43,46 @@ app.use(cors({
 let refreshTokens = [];
 
 // Refresh token route
-app.post('/refresh-token', (req, res) => {
-  const refreshToken = req.cookies.refreshToken; 
+app.post('/refresh-token', async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
 
-  if (!refreshToken) return res.sendStatus(401);
-  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+  if (!refreshToken) return res.sendStatus(401); // Unauthorized
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
+  try {
+      const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      
+      // Hämta refresh-token från databasen
+      const storedToken = await RefreshToken.findOne({ userId: payload.userId, token: refreshToken });
+      if (!storedToken) return res.sendStatus(403); // Forbidden
 
-    //create new access token
-    const accessToken = jwt.sign(
-      { userId: user.userId },
-      process.env.JWT_SECRET,
-      { expiresIn: '15m' } 
-    );
+      // Skapa en ny access-token
+      const accessToken = jwt.sign(
+          { userId: payload.userId },
+          process.env.JWT_SECRET,
+          { expiresIn: '15m' }
+      );
 
-    res.json({ accessToken });
-  });
+      // Sätt den nya access-tokenen i en cookie
+      res.cookie("token", accessToken, { httpOnly: true });
+
+      res.json({ accessToken });
+  } catch (error) {
+      console.log("Refresh token error:", error);
+      res.sendStatus(403);
+  }
 });
 
 // Logout route to remove refresh-token
-app.post('/logout', (req, res) => {
+app.post('/logout', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  refreshTokens = refreshTokens.filter(token => token !== refreshToken); 
+
+  if (!refreshToken) return res.sendStatus(204); // No content, already logged out
+
+  // Ta bort refresh-token från databasen
+  await RefreshToken.findOneAndDelete({ token: refreshToken });
+
   res.clearCookie('refreshToken');
+  res.clearCookie('token');
   res.sendStatus(204);
 });
 
