@@ -59,7 +59,7 @@ const ItemManagement: React.FC = () => {
         },
         {
           label: 'Nej',
-          onClick: () => toast('Borttagning avbröts.'),
+          onClick: () => toast.error('Borttagning avbröts.'),
         },
       ],
     });
@@ -92,7 +92,7 @@ const ItemManagement: React.FC = () => {
       {items.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {items.map((item) => (
-            <div key={item._id} className="border rounded p-4 bg-white shadow-md">
+            <div key={item._id} className="border rounded p-4 bg-white shadow-md h-full flex flex-col justify-between">
               <p className="font-bold mb-2">Title: {item.title}</p>
               <p className="mb-2">Description: {item.description}</p>
               <p className="mb-2">Price: {item.price} kr</p>

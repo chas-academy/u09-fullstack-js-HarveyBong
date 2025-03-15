@@ -25,13 +25,13 @@ const AdminPage: React.FC = () => {
             onClick={() => setActiveTab('users')}
             className={getTabButtonClasses('users')}
           >
-            Användarhantering
+            User Management
           </button>
           <button
             onClick={() => setActiveTab('items')}
             className={getTabButtonClasses('items')}
           >
-            Annons- och produktöversikt
+            Item Management
           </button>
         </div>
 

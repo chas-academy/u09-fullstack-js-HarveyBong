@@ -71,7 +71,7 @@ const UserManagement: React.FC = () => {
         },
         {
           label: "Nej",
-          onClick: () => toast("Borttagning avbröts."),
+          onClick: () => toast.error("Borttagning avbröts."),
         },
       ],
     });
@@ -164,7 +164,7 @@ const UserManagement: React.FC = () => {
         }}
         className="bg-green-500 text-white font-bold py-2 px-4 rounded mb-4 flex items-center gap-2"
       >
-        {showForm ? "Skapa användare" : "Skapa användare"} 
+        {showForm ? "+ Hide form" : "+ Create user"} 
         {showForm ? <FaArrowUp /> : <FaArrowDown />}
       </button>
 
@@ -243,13 +243,13 @@ const UserManagement: React.FC = () => {
                   onClick={() => handleEditClick(user)}
                   className="bg-yellow-500 text-white py-1 px-2 rounded text-xs"
                 >
-                  Redigera
+                  Edit
                 </button>
                 <button
                   onClick={() => confirmDelete(user._id)}
                   className="bg-red-500 text-white py-1 px-2 rounded text-xs"
                 >
-                  Radera
+                  Remove
                 </button>
               </div>
             </div>
