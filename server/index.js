@@ -1,7 +1,5 @@
 const express =require('express');
 const dotenv = require('dotenv').config();
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
-console.log('RENDER_URL:', process.env.VITE_RENDER_URL);
 const cors =require('cors');
 const app =express();
 const {mongoose} = require('mongoose');
